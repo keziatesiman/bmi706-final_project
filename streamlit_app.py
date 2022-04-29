@@ -2,14 +2,14 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 import os
-from zipfile import ZipFile, Path
+import zipfile
 import numpy as np 
 
 @st.cache
 def load_data():
 
 
-    with ZipFile("merged_datasets.zip") as myzip:
+    with zipfile.ZipFile("merged_datasets.zip") as myzip:
         
         no1 = myzip.open("merged_datasets/phase_I_test.csv")
         no2 = myzip.open("merged_datasets/phase_I_valid.csv")
