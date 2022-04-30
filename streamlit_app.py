@@ -51,7 +51,7 @@ def load_data():
 
 
 # Uncomment the next line when finished
-# df = load_data()
+# df = load_data() 
 
 ### P1.2 ###
 df_merged_grouped, df_merged_grouped3 , df_country_new= load_data()
