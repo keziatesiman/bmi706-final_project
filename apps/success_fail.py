@@ -69,18 +69,19 @@ def app():
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
     subset = subset[subset["country"].isin(countries)]
 
-    # subset of df_country_new
-    #subset = df[df['year'].notna()]
-    df2 = df.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
+    
+   
+    SFbyCountry = df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
+
 
     ### bar chart ###
 
-    chart2 = alt.Chart(df2).mark_bar().encode(
-        x="country",
-        y="trials_count",
-        tooltip=["trials_count"]
+    chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
+        x=alt.X('country', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+        y='phase',
+        color='outcome'
     )
-
+    
 
     st.altair_chart(chart1, use_container_width=True)
     st.altair_chart(chart2)
