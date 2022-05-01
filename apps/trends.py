@@ -71,7 +71,7 @@ def app():
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
     width = 800
-    height  = 450
+    height  = 350
     project = 'equirectangular'
 
     background = alt.Chart(source
@@ -124,13 +124,19 @@ def app():
         theta="sum(trials_count)",
         color="phase",
         opacity=alt.condition(select_phase, alt.value(1), alt.value(0.5)),
-    ).add_selection(select_phase)
+    ).add_selection(select_phase
+    ).properties(
+        width=250
+    )
 
     chart5_right = alt.Chart(df3).mark_arc().encode(
         theta="trials_count",
         color="outcome:O",
         tooltip=["trials_count","phase"]
-    ).transform_filter(select_phase)
+    ).transform_filter(select_phase
+    ).properties(
+        width=250
+    )
 
     chart5 = alt.hconcat(chart5_left, chart5_right
     ).resolve_scale(
