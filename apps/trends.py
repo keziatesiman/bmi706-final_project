@@ -53,20 +53,6 @@ def app():
     st.write("## Global trends")
     map_placeholder = st.empty()
 
-    subset = df[df['year'].notna()]
-    year = st.slider("Year", 1999, 2020, 2012)
-    subset = subset[subset["year"] <= year]
-
-    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
-    countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
-    subset = subset[subset["country"].isin(countries)]
-
-    # subset of df_country_new
-    df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
-
-    #subset of df_merged_grouped3
-    df3 = subset.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
-
     ### map ###
 
     source = alt.topo_feature(data.world_110m.url, 'countries')
@@ -100,7 +86,25 @@ def app():
         color='trials_count:Q',
         tooltip=['trials_count:Q', 'country:N']
         )
+
+    map_placeholder.altair_chart(background + chart_rate, use_container_width=True)
     
+    ### user selections ###
+
+    subset = df[df['year'].notna()]
+    year = st.slider("Year", 1999, 2020, 2012)
+    subset = subset[subset["year"] <= year]
+
+    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
+    countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
+    subset = subset[subset["country"].isin(countries)]
+
+    # subset of df_country_new
+    df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
+
+    #subset of df_merged_grouped3
+    df3 = subset.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
+
     ### bar chart ###
 
     chart3 = alt.Chart(df2).mark_bar().encode(
@@ -133,7 +137,6 @@ def app():
     chart5_right = alt.Chart(df3).mark_arc().encode(
         theta="trials_count",
         color="outcome:O",
-        tooltip=["phase"]
     ).transform_filter(select_phase
     ).properties(
         width=250
@@ -144,8 +147,6 @@ def app():
         color="independent",
         theta="independent"
     )
-
-    map_placeholder.altair_chart(background + chart_rate, use_container_width=True)
 
     st.write("## Clinical trials per country")
     st.altair_chart(chart3, use_container_width=True)
