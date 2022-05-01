@@ -36,7 +36,7 @@ def load_data():
     country_df = country_df.replace('United States of America', 'United States')
 
     country_code_df = pd.merge(df, country_df,  how='left', left_on='country', right_on='Country')
-    country_code_df["year"] = pd.DatetimeIndex(country_code_df["study_date"]).year
+    country_code_df["year"] = pd.DatetimeIndex(country_code_df["study_date"]).year.astype("float")
     df = country_code_df
 
     df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
@@ -50,7 +50,7 @@ def app():
 
     st.write("# Visualizing Trends in Clinical Trials")
 
-    year = st.slider("Year", min(df["year"]), max(df["year"]))
+    year = st.slider("Year", min(df["year"]), max(df["year"]), 2012)
     subset = df[df["year"] == year]
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
