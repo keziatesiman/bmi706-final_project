@@ -57,13 +57,30 @@ def app():
         color='status'
     )
     
+    st.write("## Sucesses and Failures by Phase")
+       
+    ### select country ###
 
-    chart2 = alt.Chart(df_merged_grouped3).mark_bar().encode(
-        x='outcome:N',
-        y='trials_count:Q',
-        color='outcome:N',
-        column='phase'
+    st.write("## Trends Per Country")
+
+    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
+    countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
+    subset = subset[subset["country"].isin(countries)]
+
+    # subset of df_country_new
+    df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
+
+    #subset of df_merged_grouped3
+    df3 = subset.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
+
+    ### bar chart ###
+
+    chart2 = alt.Chart(df2).mark_bar().encode(
+        x="country",
+        y="trials_count",
+        tooltip=["trials_count"]
     )
+
 
     st.altair_chart(chart1, use_container_width=True)
     st.altair_chart(chart2)
