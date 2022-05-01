@@ -50,21 +50,16 @@ def load_data():
     return df_merged_grouped,df_merged_grouped3, df_country_new
 
 def app():
-    # Uncomment the next line when finished
-    # df = load_data() 
 
-    ### P1.2 ###
-    df_merged_grouped, df_merged_grouped3 , df_country_new= load_data()
+    df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
 
-    st.write("## Clinical Trials Visualization")
+    st.write("## Visualizing Trial Success and Failure")
 
-
-    chart = alt.Chart(df_merged_grouped).mark_bar().encode(
+    chart1 = alt.Chart(df_merged_grouped).mark_bar().encode(
         x='trials_count',
         y='phase',
         color='status'
     )
-
 
     chart2 = alt.Chart(df_merged_grouped3).mark_bar().encode(
         x='outcome:N',
@@ -73,53 +68,5 @@ def app():
         column='phase'
     )
 
-
-    source = alt.topo_feature(data.world_110m.url, 'countries')
-
-    width = 900
-    height  = 500
-    project = 'equirectangular'
-
-
-    background = alt.Chart(source
-    ).mark_geoshape(
-        fill='#aaa',
-        stroke='white'
-    ).properties(
-        width=width,
-        height=height
-    ).project(project)
-
-
-    base = alt.Chart(source
-        ).properties( 
-            width=width,
-            height=height
-        ).project(project
-        ).transform_lookup(
-            lookup="id",
-            from_=alt.LookupData(df_country_new, "country-code", fields =['trials_count', 'country']),
-        )
-
-
-
-    # fix the color schema so that it will not change upon user selection
-    rate_scale = alt.Scale(domain=[df_country_new['trials_count'].min(), df_country_new['trials_count'].max()])
-    rate_color = alt.Color(field="trials_count", type="quantitative", scale=rate_scale)
-    chart_rate = base.mark_geoshape().encode(
-        ######################
-        # P3.1 map visualization showing the mortality rate
-        # add your code here
-        ######################
-        # P3.3 tooltip
-        # add your code here
-        color='trials_count:Q',
-        tooltip=['trials_count:Q', 'country:N']
-
-        )
-
-
-
-    st.altair_chart(chart, use_container_width=True)
-
-    st.altair_chart(chart2, use_container_width=True)
+    st.altair_chart(chart1, use_container_width=True)
+    st.altair_chart(chart2)

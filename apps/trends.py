@@ -55,23 +55,10 @@ def app():
 
     st.write("## Clinical Trials Visualization")
 
-    chart = alt.Chart(df_merged_grouped).mark_bar().encode(
-        x='trials_count',
-        y='phase',
-        color='status'
-    )
-
-    chart2 = alt.Chart(df_merged_grouped3).mark_bar().encode(
-        x='outcome:N',
-        y='trials_count:Q',
-        color='outcome:N',
-        column='phase'
-    )
-
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
-    width = 900
-    height  = 450
+    width = 1000
+    height  = 500
     project = 'equirectangular'
 
     background = alt.Chart(source
@@ -115,7 +102,5 @@ def app():
         title="Number of clinical trials for selected countries"
     )
 
-    st.altair_chart(chart, use_container_width=True)
-    st.altair_chart(chart2, use_container_width=True)
     st.altair_chart(background + chart_rate, use_container_width=True)
     st.altair_chart(chart3, use_container_width=True)
