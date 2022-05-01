@@ -60,28 +60,7 @@ def app():
     )
     
     st.write("## Sucesses and Failures by Phase")
-       
-    ### select country ###
 
-    st.write("## Trends Per Country")
-
-    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
-    countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
-    subset = subset[subset["country"].isin(countries)]
-
-    
-   
-    SFbyCountry = df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
-
-
-    ### bar chart ###
-
-    chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
-        x=alt.X('country', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
-        y='phase',
-        color='outcome'
-    )
-    
 
     st.altair_chart(chart1, use_container_width=True)
-    st.altair_chart(chart2)
+
