@@ -52,7 +52,7 @@ def app():
     st.write("## What happens at each phase?")
 
     chart1 = alt.Chart(df_merged_grouped).mark_bar().encode(
-        x=alt.X('sum(trials_count)', stack="normalize", format='%', title='Percentage'),
+        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='phase',
         color='status'
     )
