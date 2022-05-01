@@ -51,7 +51,7 @@ def app():
     st.write("# Visualizing Trends in Clinical Trials")
 
     st.write("## Global trends")
-    map_placeholder = st.empty()
+    # map_placeholder = st.empty()
 
     ### map ###
 
@@ -87,7 +87,7 @@ def app():
         tooltip=['trials_count:Q', 'country:N']
         )
 
-    map_placeholder.altair_chart(background + chart_rate, use_container_width=True)
+    st.altair_chart(background + chart_rate, use_container_width=True)
     
     ### user selections ###
 
