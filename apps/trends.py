@@ -92,7 +92,7 @@ def app():
         tooltip=['trials_count:Q', 'country:N']
         )
     
-    chart3 = alt.Chart(subset).mark_bar().encode(
+    chart3 = alt.Chart(df_country_new).mark_bar().encode(
         x="country",
         y="trials_count",
         tooltip=["trials_count"]
