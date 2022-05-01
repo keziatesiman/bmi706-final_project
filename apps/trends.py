@@ -50,7 +50,7 @@ def app():
 
     st.write("# Visualizing Trends in Clinical Trials")
 
-    year = st.slider("Year", 2000, 2020, 2012)
+    year = st.slider("Year", df["year"].min(), df["year"].max(), 2012)
     subset = df[df["year"] == year]
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
@@ -58,6 +58,8 @@ def app():
     subset = subset[subset["country"].isin(countries)]
 
     subset_country = subset.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
+
+    ### map ###
 
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
@@ -91,6 +93,8 @@ def app():
         tooltip=['trials_count:Q', 'country:N']
         )
     
+    ### bar chart ###
+
     chart3 = alt.Chart(subset_country).mark_bar().encode(
         x="country",
         y="trials_count",
@@ -98,7 +102,6 @@ def app():
     ).properties(
     )
 
-    st.write("Clinical trials per country")
-
+    st.write("## Clinical trials per country")
     st.altair_chart(background + chart_rate, use_container_width=True)
     st.altair_chart(chart3, use_container_width=True)
