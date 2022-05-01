@@ -8,19 +8,17 @@ from vega_datasets import data
 
 @st.cache
 def load_data():
-
-    #with zipfile.ZipFile("merged_datasets.zip") as myzip:    
     with zipfile.ZipFile("smaller.zip") as myzip:    
-        no1 = myzip.open("smaller.csv")
-    #    no1 = myzip.open("merged_datasets/phase_I_test.csv")
-    #    no2 = myzip.open("merged_datasets/phase_I_valid.csv")
-    #    no3 = myzip.open("merged_datasets/phase_I_train.csv")
-     #   no4 = myzip.open("merged_datasets/phase_II_valid.csv")
-     #   no5 = myzip.open("merged_datasets/phase_II_test.csv")
-     #   no6 = myzip.open("merged_datasets/phase_II_train.csv")
-     ##   no7 = myzip.open("merged_datasets/phase_III_valid.csv")
-      #  no8 = myzip.open("merged_datasets/phase_III_test.csv")
-      #  no9 = myzip.open("merged_datasets/phase_III_train.csv")
+
+        no1 = myzip.open("merged_datasets/phase_I_test.csv")
+        no2 = myzip.open("merged_datasets/phase_I_valid.csv")
+        no3 = myzip.open("merged_datasets/phase_I_train.csv")
+        no4 = myzip.open("merged_datasets/phase_II_valid.csv")
+        no5 = myzip.open("merged_datasets/phase_II_test.csv")
+        no6 = myzip.open("merged_datasets/phase_II_train.csv")
+        no7 = myzip.open("merged_datasets/phase_III_valid.csv")
+        no8 = myzip.open("merged_datasets/phase_III_test.csv")
+        no9 = myzip.open("merged_datasets/phase_III_train.csv")
         
     #Now, we can read in the data
     df = pd.read_csv(eval('no1'))
