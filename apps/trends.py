@@ -81,10 +81,10 @@ def app():
         ).project(project
         ).transform_lookup(
             lookup="id",
-            from_=alt.LookupData(subset_country, "country-code", fields =['trials_count', 'country']),
+            from_=alt.LookupData(df_country_new, "country-code", fields =['trials_count', 'country']),
         )
 
-    rate_scale = alt.Scale(domain=[subset_country['trials_count'].min(), subset_country['trials_count'].max()])
+    rate_scale = alt.Scale(domain=[df_country_new['trials_count'].min(), df_country_new['trials_count'].max()])
     rate_color = alt.Color(field="trials_count", type="quantitative", scale=rate_scale)
     chart_rate = base.mark_geoshape().encode(
         color='trials_count:Q',
