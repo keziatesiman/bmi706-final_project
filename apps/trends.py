@@ -58,13 +58,13 @@ def app():
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
     subset = subset[subset["country"].isin(countries)]
 
-    df2 = subset.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
+    df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
 
     ### map ###
 
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
-    width = 900
+    width = 800
     height  = 400
     project = 'equirectangular'
 
