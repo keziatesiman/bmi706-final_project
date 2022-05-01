@@ -50,6 +50,8 @@ def app():
 
     st.write("# Visualizing Trends in Clinical Trials")
 
+    map_placeholder = st.empty()
+
     subset = df[df['year'].notna()]
     year = st.slider("Year", 1999, 2020, 2012)
     subset = subset[subset["year"] <= year]
@@ -58,7 +60,11 @@ def app():
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
     subset = subset[subset["country"].isin(countries)]
 
+    # subset of df_country_new
     df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
+
+    #subset of df_merged_grouped3
+    df3 = subset.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
 
     ### map ###
 
@@ -110,9 +116,34 @@ def app():
         color="country"
     )
 
+    ### pie chart ###
+
+    select_phase = alt.selection_single(fields=[alt.FieldName("phase")])
+
+    chart5_left = alt.Chart(df3).mark_arc().encode(
+        theta="sum(trials_count)",
+        color="phase",
+        opacity=alt.condition(select_phase, alt.value(1), alt.value(0.5)),
+    ).add_selection(select_phase)
+
+    chart5_right = alt.Chart(df3).mark_arc().encode(
+        theta="trials_count",
+        color="outcome:O",
+        tooltip=["trials_count","phase"]
+    ).transform_filter(select_phase)
+
+    chart5 = alt.hconcat(chart5_left, chart5_right
+    ).resolve_scale(
+        color="independent",
+        theta="independent"
+    )
+
     st.write("## Clinical trials per country")
-    st.altair_chart(background + chart_rate, use_container_width=True)
+    map_placeholder.altair_chart(background + chart_rate, use_container_width=True)
     st.altair_chart(chart3, use_container_width=True)
 
     st.write("## Clinical trials over time")
     st.altair_chart(chart4, use_container_width=True)
+
+    st.write("## Success rate per phase")
+    st.altair_chart(chart5, use_container_width=True)
