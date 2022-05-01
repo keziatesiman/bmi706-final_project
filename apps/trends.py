@@ -52,7 +52,7 @@ def app():
 
     subset = df[df['year'].notna()]
     year = st.slider("Year", 1999, 2020, 2012)
-    subset = subset[subset["year"] == year]
+    subset = subset[subset["year"] <= year]
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
@@ -65,7 +65,7 @@ def app():
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
     width = 900
-    height  = 500
+    height  = 450
     project = 'equirectangular'
 
     background = alt.Chart(source
