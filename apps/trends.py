@@ -31,7 +31,7 @@ def load_data():
 
     df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
     
-    country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'conuntry-code': str})
+    country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'country-code': str})
     country_df = country_df[['Country', 'country-code']]
     country_df = country_df.replace('United States of America', 'United States')
 
@@ -57,8 +57,7 @@ def app():
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
     subset = subset[subset["country"].isin(countries)]
 
-    # modify df_country_new
-    df_country_new = subset.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
+    subset_country = subset.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
 
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
@@ -82,17 +81,17 @@ def app():
         ).project(project
         ).transform_lookup(
             lookup="id",
-            from_=alt.LookupData(df_country_new, "country-code", fields =['trials_count', 'country']),
+            from_=alt.LookupData(subset_country, "country-code", fields =['trials_count', 'country']),
         )
 
-    rate_scale = alt.Scale(domain=[df_country_new['trials_count'].min(), df_country_new['trials_count'].max()])
+    rate_scale = alt.Scale(domain=[subset_country['trials_count'].min(), subset_country['trials_count'].max()])
     rate_color = alt.Color(field="trials_count", type="quantitative", scale=rate_scale)
     chart_rate = base.mark_geoshape().encode(
         color='trials_count:Q',
         tooltip=['trials_count:Q', 'country:N']
         )
     
-    chart3 = alt.Chart(df_country_new).mark_bar().encode(
+    chart3 = alt.Chart(subset_country).mark_bar().encode(
         x="country",
         y="trials_count",
         tooltip=["trials_count"]
