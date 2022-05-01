@@ -49,9 +49,16 @@ def app():
     df, df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
 
     st.write("# Visualizing Trends in Clinical Trials")
-
     st.write("## Global trends")
-    # map_placeholder = st.empty()
+
+    ### select year ###
+
+    subset = df[df['year'].notna()]
+    year = st.slider("Year", 1999, 2020, 2012)
+    subset = subset[subset["year"] <= year]
+
+    # subset of df_country_new
+    df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
 
     ### map ###
 
@@ -77,10 +84,10 @@ def app():
         ).project(project
         ).transform_lookup(
             lookup="id",
-            from_=alt.LookupData(df_country_new, "country-code", fields =['trials_count', 'country']),
+            from_=alt.LookupData(df2, "country-code", fields =['trials_count', 'country']),
         )
 
-    rate_scale = alt.Scale(domain=[df_country_new['trials_count'].min(), df_country_new['trials_count'].max()])
+    rate_scale = alt.Scale(domain=[df2['trials_count'].min(), df2['trials_count'].max()])
     rate_color = alt.Color(field="trials_count", type="quantitative", scale=rate_scale)
     chart_rate = base.mark_geoshape().encode(
         color='trials_count:Q',
@@ -89,11 +96,9 @@ def app():
 
     st.altair_chart(background + chart_rate, use_container_width=True)
     
-    ### user selections ###
+    ### select country ###
 
-    subset = df[df['year'].notna()]
-    year = st.slider("Year", 1999, 2020, 2012)
-    subset = subset[subset["year"] <= year]
+    st.write("## Trends per country")
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
@@ -148,11 +153,11 @@ def app():
         theta="independent"
     )
 
-    st.write("## Clinical trials per country")
+    st.write("### Clinical trials per country")
     st.altair_chart(chart3, use_container_width=True)
 
-    st.write("## Clinical trials over time")
+    st.write("### Clinical trials over time")
     st.altair_chart(chart4, use_container_width=True)
 
-    st.write("## Success rate per phase")
+    st.write("### Success rate per phase")
     st.altair_chart(chart5)
