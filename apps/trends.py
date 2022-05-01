@@ -71,7 +71,7 @@ def app():
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
     width = 800
-    height  = 400
+    height  = 450
     project = 'equirectangular'
 
     background = alt.Chart(source
@@ -138,12 +138,14 @@ def app():
         theta="independent"
     )
 
-    st.write("## Clinical trials per country")
+    st.write("## Global trends")
     map_placeholder.altair_chart(background + chart_rate, use_container_width=True)
+
+    st.write("## Clinical trials per country")
     st.altair_chart(chart3, use_container_width=True)
 
     st.write("## Clinical trials over time")
     st.altair_chart(chart4, use_container_width=True)
 
     st.write("## Success rate per phase")
-    st.altair_chart(chart5, use_container_width=True)
+    st.altair_chart(chart5)
