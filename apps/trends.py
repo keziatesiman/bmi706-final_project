@@ -113,4 +113,6 @@ def app():
     st.write("## Clinical trials per country")
     st.altair_chart(background + chart_rate, use_container_width=True)
     st.altair_chart(chart3, use_container_width=True)
+
+    st.write("## Clinical trials over time")
     st.altair_chart(chart4, use_container_width=True)
