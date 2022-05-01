@@ -49,7 +49,7 @@ def app():
     country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
 
     st.write("## Visualizing Trial Success and Failure")
-     st.write("## What happens at each phase?")
+    st.write("## What happens at each phase?")
 
     chart1 = alt.Chart(df_merged_grouped).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize"),
