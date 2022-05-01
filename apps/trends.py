@@ -58,7 +58,7 @@ def app():
     subset = subset[subset["country"].isin(countries)]
 
     # modify df_country_new
-    df_country_new = df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
+    df_country_new = subset.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
 
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
