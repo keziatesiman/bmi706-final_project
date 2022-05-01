@@ -49,7 +49,6 @@ def app():
     df, df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
 
     st.write("# Visualizing Trends in Clinical Trials")
-
     st.write("## Global trends")
 
     ### select year ###
@@ -99,7 +98,7 @@ def app():
     
     ### select country ###
 
-    st.write("## Global trends")
+    st.write("## Trends per country")
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
