@@ -50,8 +50,9 @@ def app():
 
     st.write("# Visualizing Trends in Clinical Trials")
 
-    year = st.slider("Year", df["year"].min(), df["year"].max(), 2012)
-    subset = df[df["year"] == year]
+    subset = df[df['year'].notna()]
+    year = st.slider("Year", min(subset["year"]), max(subset["year"]), 2012)
+    subset = subset[subset["year"] == year]
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
