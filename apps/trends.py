@@ -8,8 +8,8 @@ from vega_datasets import data
 
 @st.cache
 def load_data():
-    with zipfile.ZipFile("smaller.zip") as myzip:    
 
+    with zipfile.ZipFile("merged_datasets.zip") as myzip:    
         no1 = myzip.open("merged_datasets/phase_I_test.csv")
         no2 = myzip.open("merged_datasets/phase_I_valid.csv")
         no3 = myzip.open("merged_datasets/phase_I_train.csv")
