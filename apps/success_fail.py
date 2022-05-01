@@ -37,7 +37,7 @@ def load_data():
 
     country_code_df = pd.merge(df, country_df,  how='left', left_on='country', right_on='Country')
     country_code_df["year"] = pd.DatetimeIndex(country_code_df["study_date"]).year.astype("float")
-    df = country_code_df
+    df = country_code_d
 
     df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
 
@@ -47,6 +47,8 @@ def load_data():
 def app():
 
     country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
+   
+
 
     st.write("## Visualizing Trial Success and Failure")
     st.write("## What happens at each phase?")
@@ -68,10 +70,8 @@ def app():
     subset = subset[subset["country"].isin(countries)]
 
     # subset of df_country_new
-    df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
-
-    #subset of df_merged_grouped3
-    df3 = subset.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
+    #subset = df[df['year'].notna()]
+    df2 = df.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
 
     ### bar chart ###
 
