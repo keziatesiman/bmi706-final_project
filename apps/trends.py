@@ -31,12 +31,12 @@ def load_data():
 
     df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
     
-    country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'conuntry-code': str})
+    country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'country-code': str})
     country_df = country_df[['Country', 'country-code']]
     country_df = country_df.replace('United States of America', 'United States')
 
     country_code_df = pd.merge(df, country_df,  how='left', left_on='country', right_on='Country')
-    country_code_df["year"] = pd.DatetimeIndex(country_code_df["study_date"]).year
+    country_code_df["year"] = pd.DatetimeIndex(country_code_df["study_date"]).year.astype("float")
     df = country_code_df
 
     df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
@@ -50,12 +50,14 @@ def app():
 
     st.write("# Visualizing Trends in Clinical Trials")
 
-    year = st.slider("Year", min(df["year"]), max(df["year"]), 2012)
+    year = st.slider("Year", 2000, 2020, 2012)
     subset = df[df["year"] == year]
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
     subset = subset[subset["country"].isin(countries)]
+
+    subset_country = subset.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
 
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
@@ -89,7 +91,7 @@ def app():
         tooltip=['trials_count:Q', 'country:N']
         )
     
-    chart3 = alt.Chart(subset).mark_bar().encode(
+    chart3 = alt.Chart(subset_country).mark_bar().encode(
         x="country",
         y="trials_count",
         tooltip=["trials_count"]
