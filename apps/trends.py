@@ -51,7 +51,7 @@ def app():
     st.write("# Visualizing Trends in Clinical Trials")
 
     subset = df[df['year'].notna()]
-    year = st.slider("Year", min(subset["year"]), max(subset["year"]), 2012)
+    year = st.slider("Year", 1999, 2020, 2012)
     subset = subset[subset["year"] == year]
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
