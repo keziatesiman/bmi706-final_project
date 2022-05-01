@@ -50,6 +50,7 @@ def app():
 
     st.write("# Visualizing Trends in Clinical Trials")
 
+    st.write("## Global trends")
     map_placeholder = st.empty()
 
     subset = df[df['year'].notna()]
@@ -71,7 +72,7 @@ def app():
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
     width = 800
-    height  = 350
+    height  = 450
     project = 'equirectangular'
 
     background = alt.Chart(source
@@ -132,7 +133,7 @@ def app():
     chart5_right = alt.Chart(df3).mark_arc().encode(
         theta="trials_count",
         color="outcome:O",
-        tooltip=["trials_count","phase"]
+        tooltip=["phase"]
     ).transform_filter(select_phase
     ).properties(
         width=250
@@ -144,7 +145,6 @@ def app():
         theta="independent"
     )
 
-    st.write("## Global trends")
     map_placeholder.altair_chart(background + chart_rate, use_container_width=True)
 
     st.write("## Clinical trials per country")
