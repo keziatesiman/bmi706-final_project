@@ -50,19 +50,22 @@ def app():
 
     st.write("# Visualizing Trends in Clinical Trials")
 
-    year = st.slider("Year", 2000, 2020, 2012)
-    subset = df[df["year"] == year]
+    subset = df[df['year'].notna()]
+    year = st.slider("Year", 1999, 2020, 2012)
+    subset = subset[subset["year"] <= year]
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
     subset = subset[subset["country"].isin(countries)]
 
-    subset_country = subset.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
+    df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
+
+    ### map ###
 
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
-    width = 900
-    height  = 500
+    width = 800
+    height  = 400
     project = 'equirectangular'
 
     background = alt.Chart(source
@@ -91,14 +94,25 @@ def app():
         tooltip=['trials_count:Q', 'country:N']
         )
     
-    chart3 = alt.Chart(subset_country).mark_bar().encode(
+    ### bar chart ###
+
+    chart3 = alt.Chart(df2).mark_bar().encode(
         x="country",
         y="trials_count",
         tooltip=["trials_count"]
-    ).properties(
     )
 
-    st.write("Clinical trials per country")
+    ### line plot ###
 
+    chart4 = alt.Chart(df2).mark_line().encode(
+        x=alt.X("year:O"),
+        y=alt.Y("trials_count"),
+        color="country"
+    )
+
+    st.write("## Clinical trials per country")
     st.altair_chart(background + chart_rate, use_container_width=True)
     st.altair_chart(chart3, use_container_width=True)
+
+    st.write("## Clinical trials over time")
+    st.altair_chart(chart4, use_container_width=True)

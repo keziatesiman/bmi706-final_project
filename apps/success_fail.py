@@ -9,7 +9,7 @@ from vega_datasets import data
 @st.cache
 def load_data():
 
-    with zipfile.ZipFile("merged_datasets.zip") as myzip:
+    with zipfile.ZipFile("merged_datasets.zip") as myzip:    
         no1 = myzip.open("merged_datasets/phase_I_test.csv")
         no2 = myzip.open("merged_datasets/phase_I_valid.csv")
         no3 = myzip.open("merged_datasets/phase_I_train.csv")
@@ -31,13 +31,17 @@ def load_data():
 
     df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
     
-    country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'conuntry-code': str})
+    country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'country-code': str})
     country_df = country_df[['Country', 'country-code']]
     country_df = country_df.replace('United States of America', 'United States')
+
     country_code_df = pd.merge(df, country_df,  how='left', left_on='country', right_on='Country')
+    country_code_df["year"] = pd.DatetimeIndex(country_code_df["study_date"]).year.astype("float")
+    df = country_code_df
+
     df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
-    
-    return country_code_df, df_merged_grouped, df_merged_grouped3, df_country_new
+
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new
 
 
 def app():
