@@ -107,11 +107,11 @@ def app():
 
 	
 
-    #chart4 = alt.Chart(SFbyCountry).mark_bar().encode(
-     #   x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
-     #   y='country',
-    #    color=alt.Color('outcome', legend=None)
-    #)
+    chart4 = alt.Chart(SFbyCountry).mark_bar().encode(
+        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+        y='country',
+        color=alt.Color('outcome', legend=None)
+    )
 
     
     #######
@@ -119,4 +119,4 @@ def app():
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Trends Over Time")
-   # st.altair_chart(chart4)
+    st.altair_chart(chart4)
