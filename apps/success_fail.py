@@ -9,8 +9,8 @@ from vega_datasets import data
 @st.cache
 def load_data():
 
-    with zipfile.ZipFile("smaller.zip") as myzip:    
-        no1 = myzip.open("smaller.csv")
+    with zipfile.ZipFile("full_df.zip") as myzip:    
+        no1 = myzip.open("full_df.csv")
 
     #Now, we can read in the data
     df = pd.read_csv(eval('no1'))
@@ -75,17 +75,17 @@ def app():
     ########
 
 
-    chart3 = alt.Chart(country_code_df).transform_fold(
-        [success_count, fail_count],
-        as_=['Outcome', 'Participants']
-    ).mark_bar(
-        opacity=0.3,
-        binSpacing=0
-    ).encode(
-        alt.X('Participants:Q', bin=alt.Bin(maxbins=100)),
-        alt.Y('count()', stack=None),
-        alt.Color('Outcome:N')
-    )
+    # chart3 = alt.Chart(country_code_df).transform_fold(
+    #     [success_count, fail_count],
+    #     as_=['Outcome', 'Participants']
+    # ).mark_bar(
+    #     opacity=0.3,
+    #     binSpacing=0
+    # ).encode(
+    #     alt.X('Participants:Q', bin=alt.Bin(maxbins=100)),
+    #     alt.Y('count()', stack=None),
+    #     alt.Color('Outcome:N')
+    # )
     #######
     st.altair_chart(chart1, use_container_width=True)
     st.write("## Where do trials fail?")
