@@ -83,8 +83,8 @@ def app():
 
     country_code_df = country_code_df[country_code_df['participant_count'].notna()]
 	
-    successCount = country_code_df[country_code_df.outcome == 1]
-    failCount = country_code_df[country_code_df.outcome == 0]
+    #successCount = country_code_df[country_code_df.outcome == 1]
+    #failCount = country_code_df[country_code_df.outcome == 0]
 
     #chart3 = alt.Chart(country_code_df).mark_bar().encode(
     #    alt.X("participant_count:Q", bin=True),
@@ -92,7 +92,7 @@ def app():
     #)
 
     chart3 = alt.Chart(country_code_df).transform_fold(
-    ['successCount', 'failCount'],
+    ['outcome', 'participant_count'],
     as_=['Experiment', 'Measurement']
     ).mark_bar(
     opacity=0.3,
