@@ -49,21 +49,10 @@ def app():
         color='status'
     )
     
-    st.write("## Sucesses and Failures by Phase")
-       
-    ### select country ###
-
-    st.write("## Trends Per Country"
+    st.write("## Sucesses and Failures by Country")
    
 
-
-    ### bar chart ###
-
-    chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
-        x=alt.X('country', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
-        y='phase',
-        color='outcome'
-    )
+   
     
 
     st.altair_chart(chart1, use_container_width=True)
