@@ -130,7 +130,7 @@ def app():
         x='participant_countGroup',
         y=alt.X('trials_count:Q',stack="normalize", axis=alt.Axis(format='%', title='Success/Failure %')),
         color='outcome:N',
-        column='outcome:N'
+        column='participant_countGroup:N'
     )
     
     #######
