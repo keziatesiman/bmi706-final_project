@@ -68,11 +68,11 @@ def app():
     
     ########
 
-    chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
-        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
-        y='country',
-        color=alt.Color('outcome', legend=None)
-    )
+    #chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
+    #    x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+    #    y='country',
+     #   color=alt.Color('outcome', legend=None)
+    #)
 
     #
     
@@ -100,4 +100,4 @@ def app():
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Does size matter?")
-    st.altair_chart(chart3, use_container_width=True)
+    #st.altair_chart(chart3, use_container_width=True)
