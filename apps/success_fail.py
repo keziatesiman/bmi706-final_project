@@ -53,21 +53,13 @@ def app():
        
     ### select country ###
 
-    st.write("## Trends Per Country")
-
-    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
-    countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
-    
-    subsetSFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
-    
-
-    
+    st.write("## Trends Per Country"
    
 
 
     ### bar chart ###
 
-    chart2 = alt.Chart(subsetSFbyCountry).mark_bar().encode(
+    chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
         x=alt.X('country', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='phase',
         color='outcome'
