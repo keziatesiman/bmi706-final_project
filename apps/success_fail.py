@@ -78,7 +78,7 @@ def app():
     
     ########
 
-    chart3 = alt.Chart(source).mark_bar().encode(
+    chart3 = alt.Chart(country_code_df).mark_bar().encode(
         alt.X("participant_count:Q", bin=True),
         y='count()',
     )
