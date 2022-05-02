@@ -58,14 +58,23 @@ def load_data():
     df = df[df['year'].notna()]
     df['year'] = df['year'].astype(int)
 	
+    ####
+
+    df.loc[(df.participant_count < 50),  'participant_countGroup'] = '1-25'
+    df.loc[(df.participant_count > 25),  'participant_countGroup'] = '26-50'
+    df.loc[(df.participant_count > 50),  'participant_countGroup'] = '51-100'
+    df.loc[(df.participant_count > 100),  'participant_countGroup'] = '100+'
+
+    participant_countGroupDF = df.groupby(['participant_countGroup','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 	
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear
+	
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF
 
 
 def app():
 
     #country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, success_count, fail_count = load_data()
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, SFbyYear = load_data()
+    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF = load_data()
    
 
 
@@ -115,7 +124,14 @@ def app():
         x='year',
         color=alt.Color('outcome', legend=None)
     )
-
+ #######
+	
+    chart5 = alt.Chart(participant_countGroupDF).mark_bar().encode(
+    x='participant_countGroup',
+    y='trials_count:Q',
+    color='outcome:N',
+    column='outcome:N'
+)
     
     #######
     st.altair_chart(chart1, use_container_width=True)
