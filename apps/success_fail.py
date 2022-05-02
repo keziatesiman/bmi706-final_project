@@ -15,7 +15,15 @@ def load_data():
     #Now, we can read in the data
     df = pd.read_csv(eval('no1'))
     
-    dfOrig = df
+    #####
+    
+    success_count = df[df.outcome == 1]
+    success_count = success_count[success_count.participant_count  > 0]
+    
+    fail_count = df[df.outcome == 0]
+    fail_count = fail_count[fail_count.participant_count  > 0]
+    
+    ####
 
     df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
 
@@ -35,16 +43,7 @@ def load_data():
     
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
-    #####
-    #df = pd.read_csv(eval('no1'))
-    
-    success_count = dfOrig[dfOrig.outcome == 1]
-    success_count = success_count[success_count.participant_count  > 0]
-    
-    fail_count = dfOrig[dfOrig.outcome == 0]
-    fail_count = fail_count[fail_count.participant_count  > 0]
-    
-    ####
+
     
     #return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
     return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
