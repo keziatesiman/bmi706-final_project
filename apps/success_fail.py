@@ -88,16 +88,16 @@ def app():
         y='count()',
     )
 
-    chart3 = alt.Chart(country_code_df).transform_fold(
-        [outcome, participant_count],
-        as_=['Outcome', 'Participants']
-    ).mark_bar(
-        opacity=0.3,
-        binSpacing=0
-    ).encode(
-        alt.X('Participants:Q', bin=alt.Bin(maxbins=100)),
-        alt.Y('count()', stack=None),
-        alt.Color('Outcome:N')
+   # chart3 = alt.Chart(country_code_df).transform_fold(
+   #     [outcome, participant_count],
+   #     as_=['Outcome', 'Participants']
+   # ).mark_bar(
+   #     opacity=0.3,
+   #     binSpacing=0
+   # ).encode(
+   #     alt.X('Participants:Q', bin=alt.Bin(maxbins=100)),
+   #     alt.Y('count()', stack=None),
+  #      alt.Color('Outcome:N')
   #  )
 	
     #######
