@@ -100,7 +100,7 @@ def app():
 
     # subset of df_country_new
     df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
-    df2_1 = subset[subset["participant_count"].notnat()]
+    df2_1 = subset[subset["participant_count"].notna()]
     df2_1 = subset.groupby(['country','country-code','year']).agg(participant_count=('participant_count', np.size)).reset_index()
 
     #subset of df_merged_grouped3
