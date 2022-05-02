@@ -128,7 +128,7 @@ def app():
 	
     chart5 = alt.Chart(participant_countGroupDF).mark_bar().encode(
         x='participant_countGroup',
-        y='trials_count:Q',
+        y=alt.X('trials_count:Q',stack="normalize", axis=alt.Axis(format='%', title='Success/Failure %')
         color='outcome:N',
         column='outcome:N'
     )
@@ -140,4 +140,4 @@ def app():
     st.write("## Trends Over Time")
     st.altair_chart(chart4, use_container_width=True)
     st.write("## Does size Matter?")
-    st.altair_chart(chart5, use_container_width=True)
+    st.altair_chart(chart5)
