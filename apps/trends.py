@@ -108,27 +108,17 @@ def app():
 
     ### bar chart ###
 
-    chart3_top = alt.Chart(df2).mark_bar().encode(
+    chart3 = alt.Chart(df2).mark_bar().encode(
         x="country",
         y="trials_count",
         tooltip=["trials_count"]
-    ).properties(
-        title="Clinical Trials Per Country"
     )
 
-    chart3_bottom = alt.Chart(df2_1).mark_bar().encode(
+    chart3_1 = alt.Chart(df2_1).mark_bar().encode(
         x="country",
         y="participant_count",
         tooltip=["participant_count"],
         color=alt.value("orange")
-    ).properties(
-        title="Participants Per Country*"
-    )
-
-    chart3 = alt.vconcat(chart3_top, chart3_bottom
-    ).resolve_scale(
-        color="independent",
-        y="independent"
     )
 
     ### line plot ###
@@ -166,8 +156,12 @@ def app():
         theta="independent"
     )
 
+    st.write("### Clinical Trials Per Country")
     st.altair_chart(chart3, use_container_width=True)
+
+    st.write("### Participants Per Country")
     st.write("*For trials with participant data available")
+    st.altair_chart(chart3_1, use_container_width=True)
 
     st.write("### Clinical Trials Over Time")
     st.altair_chart(chart4, use_container_width=True)
