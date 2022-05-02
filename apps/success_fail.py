@@ -47,7 +47,10 @@ def load_data():
     #countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     #SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
 
-    
+    ###
+	
+    SFbyYear= country_code_df.groupby(['year','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
+        
     #return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
 
     ####
@@ -107,9 +110,9 @@ def app():
 
 	
 
-    chart4 = alt.Chart(SFbyCountry).mark_bar().encode(
+    chart4 = alt.Chart(SFbyYear).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
-        y='country',
+        y='year',
         color=alt.Color('outcome', legend=None)
     )
 
