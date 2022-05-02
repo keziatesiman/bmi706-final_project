@@ -111,8 +111,8 @@ def app():
 	
 
     chart4 = alt.Chart(SFbyYear).mark_bar().encode(
-        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
-        y='year',
+        y=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+        x='year',
         color=alt.Color('outcome', legend=None)
     )
 
