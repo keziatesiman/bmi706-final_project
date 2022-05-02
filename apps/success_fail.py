@@ -78,7 +78,7 @@ def app():
     
     ########
 
-    chart 3 = alt.Chart(source).mark_bar().encode(
+    chart3 = alt.Chart(source).mark_bar().encode(
         alt.X("participant_count:Q", bin=True),
         y='count()',
     )
@@ -100,4 +100,4 @@ def app():
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Does size matter?")
-    #st.altair_chart(chart3, use_container_width=True)
+    st.altair_chart(chart3, use_container_width=True)
