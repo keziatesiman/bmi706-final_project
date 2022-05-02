@@ -9,8 +9,8 @@ from vega_datasets import data
 @st.cache
 def load_data():
 
-    with zipfile.ZipFile("full_df.zip") as myzip:    
-        no1 = myzip.open("full_df.csv")
+    with zipfile.ZipFile("df_country.zip") as myzip:    
+        no1 = myzip.open("df_country.csv")
         
     #Now, we can read in the data
     df = pd.read_csv(eval('no1'))
