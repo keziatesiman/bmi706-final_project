@@ -81,12 +81,14 @@ def app():
     
     ########
 
+    country_code_df = country_code_df[country_code_df['participant_count'].notna()]
+
     chart3 = alt.Chart(country_code_df).mark_bar().encode(
         alt.X("participant_count:Q", bin=True),
         y='count()',
     )
 
-   # chart3 = alt.Chart(country_code_df).transform_fold(
+    #chart3 = alt.Chart(country_code_df).transform_fold(
      #   [success_count, fail_count],
      #   as_=['Outcome', 'Participants']
     #).mark_bar(
