@@ -28,19 +28,27 @@ def load_data():
     df = country_code_df
 
     df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
-    
+    ###
     SFbyCountry = country_code_df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
     
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
+    #####
     
+    success_count = df[df.outcome == 1]
+    success_count = success_count[success_count.participant_count  > 0]
     
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
+    fail_count = df[df.outcome == 0]
+    fail_count = fail_count[fail_count.participant_count  > 0]
+    
+    ####
+    
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
 
 
 def app():
 
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry = load_data()
+    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, , success_count, fail_count = load_data()
    
 
 
@@ -59,10 +67,27 @@ def app():
     chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='country',
-        color='outcome'
+        color=alt.Color('outcome', legend=None)
     )
 
+    #
+    
+    ########
+
+    chart3 = alt.Chart(country_code_df).transform_fold(
+    ['success_count', 'fail_count],
+    as_=['Experiment', 'Measurement']
+).mark_bar(
+    opacity=0.3,
+    binSpacing=0
+).encode(
+    alt.X('Measurement:Q', bin=alt.Bin(maxbins=100)),
+    alt.Y('count()', stack=None),
+    alt.Color('Experiment:N')
+)
 
     st.altair_chart(chart1, use_container_width=True)
-    st.write("## When do trials fail?")
+    st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
+    st.write("## Does size matter?")
+    st.altair_chart(chart3, use_container_width=True)
