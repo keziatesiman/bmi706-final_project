@@ -81,7 +81,7 @@ def app():
     
     ########
 
-    country_code_df = country_code_df[country_code_df['participant_count'].notna()]
+    #country_code_df = country_code_df[country_code_df['participant_count'].notna()]
 	
     #successCount = country_code_df[country_code_df.outcome == 1]
     #failCount = country_code_df[country_code_df.outcome == 0]
@@ -91,21 +91,24 @@ def app():
     #    y='count()',
     #)
 
-    chart3 = alt.Chart(country_code_df).transform_fold(
-    ['outcome', 'participant_count'],
-    as_=['Experiment', 'Measurement']
-    ).mark_bar(
-    opacity=0.3,
-    binSpacing=0
-    ).encode(
-    alt.X('Measurement:Q', bin=alt.Bin(maxbins=100)),
-    alt.Y('count()', stack=None),
-    alt.Color('Experiment:N')
-    )
+    #chart3 = alt.Chart(country_code_df).mark_bar().encode(
+    #x='participant_count:O',
+    #y='sum(yield):Q',
+    #color='outcome:N',
+    #column='outcome:N'
+#)
 	
+	
+
+    chart4 = alt.Chart(SFbyCountry).mark_bar().encode(
+        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+        y='year',
+        color=alt.Color('outcome', legend=None)
+    )
+
     #######
     st.altair_chart(chart1, use_container_width=True)
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
-    st.write("## Does size matter?")
-    st.altair_chart(chart3, use_container_width=True)
+    st.write("## Trends Over Time")
+    st.altair_chart(chart4, use_container_width=True)
