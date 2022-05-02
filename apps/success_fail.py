@@ -100,7 +100,7 @@ def app():
 	
 	
 
-    chart4 = alt.Chart(SFbyCountry).mark_bar().encode(
+    chart4 = alt.Chart(country_code_df).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='year',
         color=alt.Color('outcome', legend=None)
