@@ -28,13 +28,16 @@ def load_data():
     df = country_code_df
 
     df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
+    
+    SFbyCountry = country_code_df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new
+
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
 
 
 def app():
 
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
+    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry = load_data()
    
 
 
