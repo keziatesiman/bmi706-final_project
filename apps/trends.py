@@ -21,7 +21,7 @@ def load_data():
     #df = df[df.year == '2012']
     
     #####
-
+    
     df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
 
     df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
