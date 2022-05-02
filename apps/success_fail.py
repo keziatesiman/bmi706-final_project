@@ -50,10 +50,13 @@ def app():
     )
     
     st.write("## Sucesses and Failures by Country")
-   
-
-   
     
+     chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
+        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+        y='country',
+        color='outcome'
+    )
+ 
 
     st.altair_chart(chart1, use_container_width=True)
     st.altair_chart(chart2)
