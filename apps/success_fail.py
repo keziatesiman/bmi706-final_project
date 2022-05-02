@@ -44,8 +44,8 @@ def load_data():
     ###
     SFbyCountry = country_code_df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
     
-    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey","United States"]
-    #SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
+    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
+    SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
 
     ###
 	
