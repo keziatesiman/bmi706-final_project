@@ -127,11 +127,11 @@ def app():
  #######
 	
     chart5 = alt.Chart(participant_countGroupDF).mark_bar().encode(
-    x='participant_countGroup',
-    y='trials_count:Q',
-    color='outcome:N',
-    column='outcome:N'
-)
+        x='participant_countGroup',
+        y='trials_count:Q',
+        color='outcome:N',
+        column='outcome:N'
+    )
     
     #######
     st.altair_chart(chart1, use_container_width=True)
