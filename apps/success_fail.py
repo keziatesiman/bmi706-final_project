@@ -37,20 +37,20 @@ def load_data():
     
     df = pd.read_csv('smaller.csv')
         
-    success_count = df[df.outcome == 1]
-    success_count = success_count[success_count.participant_count  > 0]
+    #success_count = df[df.outcome == 1]
+   #success_count = success_count[success_count.participant_count  > 0]
     
-    fail_count = df[df.outcome == 0]
-    fail_count = fail_count[fail_count.participant_count  > 0]
+    #fail_count = df[df.outcome == 0]
+    #fail_count = fail_count[fail_count.participant_count  > 0]
     
     ####
     
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
 
 
 def app():
 
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, success_count, fail_count = load_data()
+    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry = load_data()
    
 
 
