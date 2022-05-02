@@ -105,7 +105,7 @@ def app():
     #column='outcome:N'
 #)
 
-    print(country_code_df.head)
+    print(country_code_df.columns)
 	
 
     chart4 = alt.Chart(country_code_df).mark_bar().encode(
