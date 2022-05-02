@@ -82,23 +82,26 @@ def app():
     ########
 
     country_code_df = country_code_df[country_code_df['participant_count'].notna()]
+	
+    successCount = country_code_df[country_code_df.outcome == 1]
+    failCount = country_code_df[country_code_df.outcome == 0]
 
-    chart3 = alt.Chart(country_code_df).mark_bar().encode(
-        alt.X("participant_count:Q", bin=True),
-        y='count()',
+    #chart3 = alt.Chart(country_code_df).mark_bar().encode(
+    #    alt.X("participant_count:Q", bin=True),
+    #    y='count()',
+    #)
+
+    chart3 = alt.Chart(country_code_df).transform_fold(
+    ['successCount', 'failCount'],
+    as_=['Experiment', 'Measurement']
+    ).mark_bar(
+    opacity=0.3,
+    binSpacing=0
+    ).encode(
+    alt.X('Measurement:Q', bin=alt.Bin(maxbins=100)),
+    alt.Y('count()', stack=None),
+    alt.Color('Experiment:N')
     )
-
-   # chart3 = alt.Chart(country_code_df).transform_fold(
-   #     [outcome, participant_count],
-   #     as_=['Outcome', 'Participants']
-   # ).mark_bar(
-   #     opacity=0.3,
-   #     binSpacing=0
-   # ).encode(
-   #     alt.X('Participants:Q', bin=alt.Bin(maxbins=100)),
-   #     alt.Y('count()', stack=None),
-  #      alt.Color('Outcome:N')
-  #  )
 	
     #######
     st.altair_chart(chart1, use_container_width=True)
