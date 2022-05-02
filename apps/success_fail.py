@@ -53,10 +53,10 @@ def load_data():
 	
     ####
 
-    df.loc[(df.participant_count < 50),  'participant_countGroup'] = '1-25'
-    df.loc[(df.participant_count > 25),  'participant_countGroup'] = '26-50'
-    df.loc[(df.participant_count > 50),  'participant_countGroup'] = '51-100'
-    df.loc[(df.participant_count > 100),  'participant_countGroup'] = '100+'
+    df.loc[(df.participant_count < 10),  'participant_countGroup'] = '1-10'
+    df.loc[(df.participant_count > 10),  'participant_countGroup'] = '11-25'
+    df.loc[(df.participant_count > 50),  'participant_countGroup'] = '25-50'
+    df.loc[(df.participant_count > 75),  'participant_countGroup'] = '75+'
 
     participant_countGroupDF = df.groupby(['participant_countGroup','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 	
