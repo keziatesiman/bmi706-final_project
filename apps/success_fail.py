@@ -14,6 +14,9 @@ def load_data():
 
     #Now, we can read in the data
     df = pd.read_csv(eval('no1'))
+
+    ####	
+    df = df[df.year == 2012]
     
     #####
     
