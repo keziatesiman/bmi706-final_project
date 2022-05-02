@@ -44,8 +44,8 @@ def load_data():
     ###
     SFbyCountry = country_code_df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
     
-    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
-    SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
+    #countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
+    #SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
 
     
     #return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
@@ -105,18 +105,18 @@ def app():
     #column='outcome:N'
 #)
 
-    print(country_code_df.columns)
 	
 
-    #chart4 = alt.Chart(country_code_df).mark_bar().encode(
+    #chart4 = alt.Chart(SFbyCountry).mark_bar().encode(
      #   x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
-     #   y='year',
-     #   color=alt.Color('outcome', legend=None)
+     #   y='country',
+    #    color=alt.Color('outcome', legend=None)
     #)
 
+    
     #######
     st.altair_chart(chart1, use_container_width=True)
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Trends Over Time")
-    #st.altair_chart(chart4)
+   # st.altair_chart(chart4)
