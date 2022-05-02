@@ -16,7 +16,7 @@ def load_data():
     df = pd.read_csv(eval('no1'))
 
     ####	
-    df = df.head(self, n=20000)
+    df = df.head(100000)
     
     #####
     
