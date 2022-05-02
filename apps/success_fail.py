@@ -17,11 +17,11 @@ def load_data():
     
     #####
     
-    success_count = df[df.outcome == 1]
-    success_count = success_count[success_count.participant_count  > 0]
+    #success_count = df[df.outcome == 1]
+    #success_count = success_count[success_count.participant_count  > 0]
     
-    fail_count = df[df.outcome == 0]
-    fail_count = fail_count[fail_count.participant_count  > 0]
+    #fail_count = df[df.outcome == 0]
+    #fail_count = fail_count[fail_count.participant_count  > 0]
     
     ####
 
@@ -45,14 +45,14 @@ def load_data():
     SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
 
     
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
-    #return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
+    #return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
 
 
 def app():
 
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, success_count, fail_count = load_data()
-    #country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry = load_data()
+    #country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, success_count, fail_count = load_data()
+    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry = load_data()
    
 
 
@@ -77,6 +77,11 @@ def app():
     #
     
     ########
+
+    chart 3 = alt.Chart(source).mark_bar().encode(
+        alt.X("participant_count:Q", bin=True),
+        y='count()',
+    )
 
     #chart3 = alt.Chart(country_code_df).transform_fold(
      #   [success_count, fail_count],
