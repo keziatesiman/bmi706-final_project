@@ -44,7 +44,7 @@ def load_data():
     ###
     SFbyCountry = country_code_df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
     
-    #countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
+    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey","United States"]
     #SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
 
     ###
@@ -122,4 +122,4 @@ def app():
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Trends Over Time")
-    st.altair_chart(chart4)
+    st.altair_chart(chart4, use_container_width=True))
