@@ -30,8 +30,11 @@ def load_data():
     df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
     
     SFbyCountry = country_code_df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
-
-
+    
+    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
+    SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
+    
+    
     return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
 
 
