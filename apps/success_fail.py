@@ -139,3 +139,5 @@ def app():
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Trends Over Time")
     st.altair_chart(chart4, use_container_width=True)
+    st.write("## Does size Matter?")
+    st.altair_chart(chart5, use_container_width=True)
