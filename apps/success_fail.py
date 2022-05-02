@@ -68,20 +68,20 @@ def app():
     
     ########
 
-    #chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
-    #    x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
-    #    y='country',
-     #   color=alt.Color('outcome', legend=None)
-    #)
+    chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
+        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+        y='country',
+        color=alt.Color('outcome', legend=None)
+    )
 
-    #
+    
     
     ########
 
-    chart3 = alt.Chart(country_code_df).mark_bar().encode(
-        alt.X("participant_count:Q", bin=True),
-        y='count()',
-    )
+    #chart3 = alt.Chart(country_code_df).mark_bar().encode(
+     #   alt.X("participant_count:Q", bin=True),
+     #   y='count()',
+    #)
 
     #chart3 = alt.Chart(country_code_df).transform_fold(
      #   [success_count, fail_count],
