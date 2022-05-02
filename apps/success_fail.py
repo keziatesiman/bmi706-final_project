@@ -82,7 +82,7 @@ def app():
     ########
 
     chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
-        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='Percentage')),
         y='country',
         color=alt.Color('outcome', legend=None)
     )
@@ -111,7 +111,7 @@ def app():
 	
 
     chart4 = alt.Chart(SFbyYear).mark_bar().encode(
-        y=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+        y=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='Success/Failure %')),
         x='year',
         color=alt.Color('outcome', legend=None)
     )
