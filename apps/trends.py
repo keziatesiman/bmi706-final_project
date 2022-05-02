@@ -16,7 +16,7 @@ def load_data():
     df = pd.read_csv(eval('no1'))
     
     ##*********************
-    df = df.head(self, n=20000)
+    df = df.head(20000)
     ##**********************
 
     df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
