@@ -35,11 +35,11 @@ def load_data():
     SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
     #####
     
-    success_count = df[df.outcome == 1]
-    success_count = success_count[success_count.participant_count  > 0]
+    #success_count = df[df.outcome == 1]
+    #success_count = success_count[success_count.participant_count  > 0]
     
-    fail_count = df[df.outcome == 0]
-    fail_count = fail_count[fail_count.participant_count  > 0]
+    #fail_count = df[df.outcome == 0]
+    #fail_count = fail_count[fail_count.participant_count  > 0]
     
     ####
     
@@ -75,6 +75,7 @@ def app():
     ########
 
 
+    #######
     st.altair_chart(chart1, use_container_width=True)
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
