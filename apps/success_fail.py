@@ -54,7 +54,7 @@ def app():
     ########
     st.write("## Sucesses and Failures by Phase")
     
-        chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
+    chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='country',
         color='outcome'
