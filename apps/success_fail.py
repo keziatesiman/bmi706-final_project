@@ -28,13 +28,16 @@ def load_data():
     df = country_code_df
 
     df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
+    
+    SFbyCountry = df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new
+
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
 
 
 def app():
 
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
+    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry = load_data()
 
 
     st.write("## Visualizing Trial Success and Failure")
@@ -55,8 +58,6 @@ def app():
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
     
-       
-    SFbyCountry = df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
     subsetSFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
     
 
