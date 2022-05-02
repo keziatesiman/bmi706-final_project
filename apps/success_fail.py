@@ -25,7 +25,7 @@ def load_data():
 
     country_code_df = pd.merge(df, country_df,  how='left', left_on='country', right_on='Country')
     country_code_df["year"] = pd.DatetimeIndex(country_code_df["study_date"]).year.astype("float")
-    df = country_code_d
+    df = country_code_df
 
     df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
 
