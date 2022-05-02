@@ -14,6 +14,8 @@ def load_data():
 
     #Now, we can read in the data
     df = pd.read_csv(eval('no1'))
+    
+    dfOrig = df
 
     df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
 
@@ -36,11 +38,11 @@ def load_data():
     #####
     #df = pd.read_csv(eval('no1'))
     
-    #success_count = df[df.outcome == 1]
-    #success_count = success_count[success_count.participant_count  > 0]
+    success_count = dfOrig[dfOrig.outcome == 1]
+    success_count = success_count[success_count.participant_count  > 0]
     
-    #fail_count = df[df.outcome == 0]
-    #fail_count = fail_count[fail_count.participant_count  > 0]
+    fail_count = dfOrig[dfOrig.outcome == 0]
+    fail_count = fail_count[fail_count.participant_count  > 0]
     
     ####
     
