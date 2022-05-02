@@ -49,6 +49,12 @@ def load_data():
 
     
     #return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
+
+    ####
+	
+    df['year'] = df['year'].astype(int)
+	
+	
     return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
 
 
