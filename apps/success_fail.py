@@ -16,7 +16,7 @@ def load_data():
     df = pd.read_csv(eval('no1'))
 
     ####	
-    df = df[df.year == 2012]
+    df = df.head(self, n=20000)
     
     #####
     
