@@ -37,7 +37,7 @@ def load_data():
 
 def app():
 
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry = load_data()
+     df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry = load_data()
 
 
     st.write("## Visualizing Trial Success and Failure")
