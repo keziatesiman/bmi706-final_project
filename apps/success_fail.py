@@ -75,8 +75,8 @@ def app():
     ########
 
     chart3 = alt.Chart(country_code_df).transform_fold(
-            ['success_count', 'fail_count],
-            as_=['Experiment', 'Measurement']
+            [success_count, fail_count],
+            as_=['Outcome', 'Paricipants']
         ).mark_bar(
             opacity=0.3,
             binSpacing=0
