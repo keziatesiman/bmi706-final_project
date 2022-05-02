@@ -55,8 +55,7 @@ def app():
     
     
     ########
-    st.write("## Sucesses and Failures by Phase")
-    
+
     chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='country',
@@ -65,4 +64,5 @@ def app():
 
 
     st.altair_chart(chart1, use_container_width=True)
+    st.write("## When do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
