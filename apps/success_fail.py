@@ -36,6 +36,7 @@ def app():
 
     country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
    
+    SFbyCountry = df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 
 
     st.write("## Visualizing Trial Success and Failure")
@@ -55,11 +56,10 @@ def app():
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
-    subset = subset[subset["country"].isin(countries)]
+    SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
 
     
    
-    SFbyCountry = df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 
 
     ### bar chart ###
