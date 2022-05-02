@@ -67,8 +67,7 @@ def load_data():
 
     participant_countGroupDF = df.groupby(['participant_countGroup','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 	
-    SFbyCountry['outcome'] = SFbyCountry['outcome'].map({'Success': 1, 'Failure': '0'})
-
+   
     return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF
 
 
