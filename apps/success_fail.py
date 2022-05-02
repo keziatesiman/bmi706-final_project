@@ -59,13 +59,13 @@ def load_data():
     df['year'] = df['year'].astype(int)
 	
 	
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear
 
 
 def app():
 
     #country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, success_count, fail_count = load_data()
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry = load_data()
+    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, SFbyYear = load_data()
    
 
 
