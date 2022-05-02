@@ -19,13 +19,6 @@ def load_data():
     df = df.head(100000)
     
     #####
-    
-    #success_count = df[df.outcome == 1]
-    #success_count = success_count[success_count.participant_count  > 0]
-    
-    #fail_count = df[df.outcome == 0]
-    #fail_count = fail_count[fail_count.participant_count  > 0]
-    
     ####
 
     df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
@@ -93,7 +86,7 @@ def app():
     chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='Percentage')),
         y='country',
-        color=alt.Color('outcome')
+        color=alt.Color('outcome', legend=None)
     )
 
     
