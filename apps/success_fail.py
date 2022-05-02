@@ -127,7 +127,7 @@ def app():
  #######
 	
     chart5 = alt.Chart(participant_countGroupDF).mark_bar().encode(
-        x='participant_countGroup',
+        x=alt.X('participant_countGroup', axis=alt.Axis(title='Number of Subjects')
         y=alt.X('trials_count:Q',stack="normalize", axis=alt.Axis(format='%', title='Success/Failure %')),
         color=alt.Color('outcome', legend=None)
     )
