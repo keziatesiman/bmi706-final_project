@@ -35,7 +35,7 @@ def load_data():
     SFbyCountry = SFbyCountry[SFbyCountry["country"].isin(countries)]
     #####
     
-    df = pd.read_csv('smaller.csv')
+    #df = pd.read_csv('smaller.csv')
         
     #success_count = df[df.outcome == 1]
    #success_count = success_count[success_count.participant_count  > 0]
