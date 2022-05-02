@@ -42,7 +42,7 @@ def app():
 
     st.write("# Visualizing Trends in Clinical Trial Data")
     st.write("A data visualization project by Kezia Irene, Manqing Liang, Nate Greenbaum, and Nina Xiong.")
-    st.write("Source: ClinicalTrials.gov.")
+    st.write("Source: ClinicalTrials.gov")
     st.write("## Global Trends")
 
     ### select year ###
@@ -100,6 +100,8 @@ def app():
 
     # subset of df_country_new
     df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
+    df2_1 = subset[subset["participant_count"].notnat()]
+    df2_1 = subset.groupby(['country','country-code','year']).agg(participant_count=('participant_count', np.size)).reset_index()
 
     #subset of df_merged_grouped3
     df3 = subset.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
@@ -110,6 +112,13 @@ def app():
         x="country",
         y="trials_count",
         tooltip=["trials_count"]
+    )
+
+    chart3_1 = alt.Chart(df2_1).mark_bar().encode(
+        x="country",
+        y="participant_count",
+        tooltip=["participant_count"],
+        color=alt.value("orange")
     )
 
     ### line plot ###
@@ -147,11 +156,15 @@ def app():
         theta="independent"
     )
 
-    st.write("### Clinical trials per country")
+    st.write("### Clinical Trials Per Country")
     st.altair_chart(chart3, use_container_width=True)
 
-    st.write("### Clinical trials over time")
+    st.write("### Participants Per Country")
+    st.write("*For trials with participant data available")
+    st.altair_chart(chart3_1, use_container_width=True)
+
+    st.write("### Clinical Trials Over Time")
     st.altair_chart(chart4, use_container_width=True)
 
-    st.write("### Success rate per phase")
+    st.write("### Success Rate Per Phase")
     st.altair_chart(chart5)
