@@ -36,11 +36,11 @@ def load_data():
     #####
     df = pd.read_csv(eval('no1'))
     
-    success_count = df[df.outcome == 1]
-    success_count = success_count[success_count.participant_count  > 0]
+    #success_count = df[df.outcome == 1]
+    #success_count = success_count[success_count.participant_count  > 0]
     
-    fail_count = df[df.outcome == 0]
-    fail_count = fail_count[fail_count.participant_count  > 0]
+    #fail_count = df[df.outcome == 0]
+    #fail_count = fail_count[fail_count.participant_count  > 0]
     
     ####
     
