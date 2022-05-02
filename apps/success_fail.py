@@ -49,7 +49,7 @@ def load_data():
 
     ###
 	
-    SFbyYear= country_code_df.groupby(['year','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
+    SFbyYear = country_code_df.groupby(['year','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
         
     #return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
 
