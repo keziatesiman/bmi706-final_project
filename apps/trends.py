@@ -18,7 +18,7 @@ def load_data():
     ####	
     #************* LIMIT YEARS **********
     
-    df = df[df.year == '2012']
+    #df = df[df.year == '2012']
     
     #####
 
