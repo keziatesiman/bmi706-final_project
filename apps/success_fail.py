@@ -75,15 +75,15 @@ def app():
     ########
 
     chart3 = alt.Chart(country_code_df).transform_fold(
-            [success_count, fail_count],
-            as_=['Outcome', 'Paricipants']
-        ).mark_bar(
-            opacity=0.3,
-            binSpacing=0
-        ).encode(
-            alt.X('Measurement:Q', bin=alt.Bin(maxbins=100)),
-            alt.Y('count()', stack=None),
-            alt.Color('Experiment:N')
+        [success_count, fail_count],
+        as_=['Outcome', 'Participants']
+    ).mark_bar(
+        opacity=0.3,
+        binSpacing=0
+    ).encode(
+        alt.X('Participants:Q', bin=alt.Bin(maxbins=100)),
+        alt.Y('count()', stack=None),
+        alt.Color('Outcome:N')
     )
 
     st.altair_chart(chart1, use_container_width=True)
