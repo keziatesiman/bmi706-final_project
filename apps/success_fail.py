@@ -11,11 +11,10 @@ def load_data():
 
     with zipfile.ZipFile("smaller.zip") as myzip:    
         no1 = myzip.open("smaller.csv")
-        
+
     #Now, we can read in the data
     df = pd.read_csv(eval('no1'))
 
-  
     df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
 
     df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
@@ -49,28 +48,6 @@ def app():
     )
     
     st.write("## Sucesses and Failures by Phase")
-       
-    ### select country ###
 
-    st.write("## Trends Per Country")
-
-    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
-    countries = st.multiselect("Countries", pd.unique(df_country_new["country"]), countries)
-    subset = subset[subset["country"].isin(countries)]
-
-    
-   
-    SFbyCountry = df.groupby(['country','country-code','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
-
-
-    ### bar chart ###
-
-    chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
-        x=alt.X('country', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
-        y='phase',
-        color='outcome'
-    )
-    
 
     st.altair_chart(chart1, use_container_width=True)
-    st.altair_chart(chart2)
