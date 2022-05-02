@@ -86,7 +86,7 @@ def app():
         y='count()',
     )
 
-    chart3 = alt.Chart(country_code_df).transform_fold(
+   # chart3 = alt.Chart(country_code_df).transform_fold(
      #   [success_count, fail_count],
      #   as_=['Outcome', 'Participants']
     #).mark_bar(
