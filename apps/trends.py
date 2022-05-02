@@ -110,14 +110,14 @@ def app():
 
     chart3 = alt.Chart(df2).mark_bar().encode(
         x="country",
-        y="trials_count",
-        tooltip=["trials_count"]
+        y="sum(trials_count)",
+        tooltip=["sum(trials_count)"]
     )
 
     chart3_1 = alt.Chart(df2_1).mark_bar().encode(
         x="country",
-        y="participant_count",
-        tooltip=["participant_count"],
+        y="sum(participant_count)",
+        tooltip=["sum(participant_count)"],
         color=alt.value("orange")
     )
 
