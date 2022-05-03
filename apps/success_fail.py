@@ -80,7 +80,7 @@ def app():
         color='status'
     )
     
-    chart1B = alt.Chart(df_merged_grouped).mark_bar().encode(
+    chart1B = alt.Chart(country_code_df).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='phase',
         color='outcome'
