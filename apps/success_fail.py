@@ -80,7 +80,7 @@ def app():
         color='status'
     )
     
-    chart1_2 = alt.Chart(df_merged_grouped).mark_bar().encode(
+    chart1B = alt.Chart(df_merged_grouped).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='phase',
         color='outcome'
@@ -132,7 +132,7 @@ def app():
     
     #######
     st.altair_chart(chart1, use_container_width=True)
-    st.altair_chart(chart1_5, use_container_width=True)
+    st.altair_chart(chart1B, use_container_width=True)
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Trends Over Time")
