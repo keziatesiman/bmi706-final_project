@@ -5,26 +5,7 @@ import numpy as np
 import altair as alt
 import streamlit as st
 from vega_datasets import data
-from rdkit import Chem
-from rdkit import rdBase
-from rdkit.Chem import AllChem
-from rdkit.Chem import DataStructs
-from rdkit.Chem import PandasTools
-from rdkit.Chem import RDConfig
-from rdkit.Chem import Draw
-from rdkit.Chem.Draw import IPythonConsole
- 
-from sklearn.decomposition import PCA
 
-def mol2fparr(mol):
-    arr = np.zeros((0,))
-    #print(mol)
-    fp = AllChem.GetMorganFingerprintAsBitVect(mol,2)
-    DataStructs.ConvertToNumpyArray(fp, arr)
-    #except Exception: 
-    #   pass
-    return arr
-    
 
 @st.cache
 def load_data():
