@@ -132,7 +132,7 @@ def app():
     
     #######
     st.altair_chart(chart1, use_container_width=True)
-    st.altair_chart(chart1, use_container_width=True)
+    st.altair_chart(chart1_5, use_container_width=True)
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Trends Over Time")
