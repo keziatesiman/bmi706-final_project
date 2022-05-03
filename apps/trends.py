@@ -40,9 +40,9 @@ def app():
 
     df, df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
 
-    st.write("# Visualizing Trends in Clinical Trial Data")
+    st.write("# Visualizing Trends in Clinical Trials")
     st.write("A data visualization project by Kezia Irene, Manqing Liang, Nate Greenbaum, and Nina Xiong.")
-    st.write("Source: ClinicalTrials.gov")
+    st.write("Sources: [ClinicalTrials.gov](https://clinicaltrials.gov/) via [AACT](https://aact.ctti-clinicaltrials.org/) and [Trials Outcome Prediction](https://github.com/futianfan/clinical-trial-outcome-prediction)")
     st.write("## Global Trends")
 
     ### select year ###
