@@ -3,3 +3,7 @@ altair
 pandas
 numpy
 vega_datasets
+rdkit
+rdkit.Chem
+sklearn.decomposition
+rdkit.Chem.Draw
