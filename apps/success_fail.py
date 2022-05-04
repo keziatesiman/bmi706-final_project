@@ -20,9 +20,9 @@ def load_data():
     df2 = pd.read_csv(eval('no2'))
     
 
-    df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
+    df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', lambda x: x.nunique())).reset_index()
 
-    df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
+    df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', lambda x: x.nunique())).reset_index()
     
     country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'country-code': str})
     country_df = country_df[['Country', 'country-code']]
@@ -160,18 +160,36 @@ def app():
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Trends Over Time")
     st.altair_chart(chart4, use_container_width=True)
-    st.write("## Does size Matter?")
+    st.write("## Does size matter?")
     st.altair_chart(chart5, use_container_width=True)
 
     st.write("## Does the number of inclusion / exclusion criteria matter?")
     st.altair_chart(chart_inclusion | chart_exclusion, use_container_width=True)
- #######
+
+    st.write("## Does trial success depend on the therapeutic area and year?")
+    
 
     phase_option = pd.unique(df['phase']).tolist()
     phase = st.selectbox(
         'Phase',
         phase_option)
-	
+
+    chart7 = alt.Chart(df[df.phase ==phase]).mark_circle().encode(
+        alt.X('year(study_date):T', scale=alt.Scale(zero=False), title = 'Year'),
+        alt.Y('block_desc:N', scale=alt.Scale(zero=False, padding=1), title = 'Disease class'),
+        color='outcome:N',
+        size='participant_count:Q'
+        ,tooltip=['nct_id','participant_count','status','phase','diseases','drugs','outcome']
+    )
+#########
+
+
+    st.altair_chart(chart7, use_container_width=True)
+
+ #######
+
+
+'''
     base = alt.Chart(df[df.phase ==phase]).mark_circle(color="red").encode(
         alt.X("probability_success"), alt.Y("participant_count"),tooltip=['probability_success','participant_count']
     )
@@ -180,23 +198,11 @@ def app():
 
     chart6 = base+ base.transform_regression('probability_success', 'participant_count').mark_line()
 
-    '''
+
     ### Remove chart 6
     st.write("## Correlation between number of patients and historical success rate")
     st.altair_chart(chart6, use_container_width=True)
-    '''
+'''
 
 #########
-
-    chart7 = alt.Chart(df[df.phase ==phase]).mark_circle().encode(
-        alt.X('year(study_date):T', scale=alt.Scale(zero=False)),
-        alt.Y('block_desc:N', scale=alt.Scale(zero=False, padding=1)),
-        color='outcome:N',
-        size='participant_count:Q'
-        ,tooltip=['nct_id','participant_count','status','phase','diseases','drugs','outcome']
-    )
-#########
-
-    st.write("## Does trial success depend on the therapeutic area and year?")
     
-    st.altair_chart(chart7, use_container_width=True)

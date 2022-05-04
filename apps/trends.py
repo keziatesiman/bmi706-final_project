@@ -122,3 +122,52 @@ def app():
         "text/csv",
         key='download-csv'
     )
+
+
+    st.write("## Trends Per Country")
+
+    countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
+    countries = st.multiselect("Countries", pd.unique(df_trial_count_year_country["country"]), countries)
+    subset = df_trial_count_year_country[df_trial_count_year_country["country"].isin(countries)]
+    subset = subset[subset["year"]<= year]
+    chart4 = alt.Chart(subset).mark_line().encode(
+        x=alt.X("year:O"),
+        y=alt.Y("trials_count:Q"),
+        color="country",
+        tooltip = ['year','trials_count', 'country']
+    ).properties(
+        width=400,
+        height=250
+        )
+    st.altair_chart(chart4, use_container_width=True)
+
+    df_new = df[df["country"].isin(countries)]
+    df_new = df_new[df_new["year"]<= 2012]
+
+    df3 = df_new.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
+    select_phase = alt.selection_single(fields=[alt.FieldName("phase")])
+    chart5_left = alt.Chart(df3).mark_bar().encode(
+        x="phase",
+        y="sum(trials_count)",
+        opacity=alt.condition(select_phase, alt.value(1), alt.value(0.5)),
+    ).add_selection(select_phase
+    ).properties(
+        width=250
+    )
+
+    chart5_right = alt.Chart(df3).mark_bar().encode(
+        x="outcome:O",
+        y="trials_count",
+    ).transform_filter(select_phase
+    ).properties(
+        width=250
+    )
+
+    chart5 = alt.hconcat(chart5_left, chart5_right
+    ).resolve_scale(
+        x="independent",
+        y="independent"
+    )
+    st.write("### Success Rate Per Phase")
+    st.altair_chart(chart5)
+
