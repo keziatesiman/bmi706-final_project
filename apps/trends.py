@@ -43,7 +43,7 @@ def app():
     st.write("## Clinical Trials thoughout the Years")
 
     ### Generating aggregated tables
-    df_trial_count_year_country = df.groupby(['country','country-code','year','block_desc']).agg(trials_count=('nct_id', np.size)).reset_index() # Trial count per year per country
+    df_trial_count_year_country = df.groupby(['country','country-code','year','block_desc']).agg(trials_count=('nct_id', np.size)).reset_index() # Trial count per year per country per disease class
 
     ### 1. Timeline
 
