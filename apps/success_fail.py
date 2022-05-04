@@ -20,9 +20,9 @@ def load_data():
     df2 = pd.read_csv(eval('no2'))
     
 
-    df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
+    df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', lambda x: x.nunique())).reset_index()
 
-    df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
+    df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', lambda x: x.nunique())).reset_index()
     
     country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'country-code': str})
     country_df = country_df[['Country', 'country-code']]
