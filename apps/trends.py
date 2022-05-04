@@ -62,14 +62,12 @@ def app():
 
     ## Select year ###
     year = st.slider("Select a year", 1999, 2020, 2012) # Range: 1999, 2012. Default: 2012
-
-    # Subsetting df by year
     df_world_map = df_trial_count_year_country[df_trial_count_year_country["year"] == year]
 
     ## Select a disease class ###
-    diseases = pd.unique(df_world_map["block_desc"])
+    diseases = ['Neoplasms']
     disease_class = st.multiselect("Disease class: ", pd.unique(df_world_map["block_desc"]), diseases)
-    df_world_map = df_world_map[df_world_map["block_desc"].isin(diseases)]
+    df_world_map = df_world_map[df_world_map["block_desc"].isin(disease_class)]
 
     # Background
     source = alt.topo_feature(data.world_110m.url, 'countries')
@@ -93,19 +91,20 @@ def app():
         ).project(project
         ).transform_lookup(
             lookup="id",
-            from_=alt.LookupData(df_world_map, "country-code", fields =['trials_count', 'country']),
+            from_=alt.LookupData(df_world_map, "country-code", fields =['trials_count', 'country', 'disease_class','year']),
         )
 
     # Map values
     rate_scale = alt.Scale(domain=[df_world_map['trials_count'].min(), df_world_map['trials_count'].max()])
-    rate_color = alt.Color(field='trials_count', type="quantitative", scale=rate_scale)
+    rate_color = alt.Color(field='sum(trials_count)', type="quantitative", scale=rate_scale)
     chart_rate = base.mark_geoshape().encode(
-        color='trials_count:Q',
-        tooltip=['trials_count:Q', 'country:N']
+        color='sum(trials_count):Q',
+        tooltip=['sum(trials_count):Q', 'country:N']
         )
     
     st.altair_chart(background + chart_rate, use_container_width=True)   
 
+    ### Present tabular data for further analysis
     def convert_df(df):
         return df.to_csv().encode('utf-8')
 

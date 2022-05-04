@@ -22,7 +22,7 @@ def app():
     #country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, success_count, fail_count = load_data()
     df  = load_data()
 
-    st.write("## Visualizing Drug Molecules")
+    st.write("## Visualizing Drug Molecule Structure with PCA")
     
     chart1 = alt.Chart(df[0:5000]).mark_point().encode(
            x = 'PCA1',

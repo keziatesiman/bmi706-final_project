@@ -19,8 +19,6 @@ def load_data():
     df = pd.read_csv(eval('no1'))
     df2 = pd.read_csv(eval('no2'))
     
-    #####
-    ####
 
     df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
 
@@ -47,15 +45,9 @@ def load_data():
 
     SFbyPhase = country_code_df.groupby(['phase','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 
-        
-    #return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
-
-    ####
-
     df = df[df['year'].notna()]
     df['year'] = df['year'].astype(int)
 	
-    ####
 
     df.loc[(df.participant_count < 10),  'participant_countGroup'] = '1-10'
     df.loc[(df.participant_count > 10),  'participant_countGroup'] = '11-25'
@@ -64,9 +56,6 @@ def load_data():
 
     participant_countGroupDF = df.groupby(['participant_countGroup','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 	
-    #t = lambda data: pipe(data, limit_rows(max_rows=12000), to_values)
-    #alt.data_transformers.register('custom', t)
-    #alt.data_transformers.enable('custom')
     return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase, df2 
 
 
@@ -90,8 +79,8 @@ def app():
     chart1B = alt.Chart(SFbyPhase).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='phase',
-        color='outcome',
-        tooltip = ['sum(trials_count)', 'phase','outcome']
+        color=alt.Color('outcome'),
+        tooltip = ['sum(trials_count)', 'phase','outcome:N']
     )
     
     ########
@@ -141,22 +130,27 @@ def app():
         tooltip = ['participant_countGroup','trials_count','outcome']
     )
 ####### 
-    chart_inclusion = alt.Chart(df2[df2.phase =='phase 3']).mark_circle().encode(
-            alt.X("inclusion:Q"), alt.Y("participant_count:Q"),
-        color = 'outcome:N',
-        tooltip = ['inclusion','exclusion','participant_count','status']
-    )
-    chart_inclusion.encoding.x.title = 'Inclusion Criteria'
-    chart_inclusion.encoding.y.title = 'Number of Patients'
     
+    brush = alt.selection(type='interval', resolve='global')
 
-    chart_exclusion = alt.Chart(df2[df2.phase =='phase 3']).mark_circle().encode(
-            alt.X("exclusion:Q"), alt.Y("participant_count:Q"),
-        color = 'outcome:N',
-        tooltip = ['inclusion','exclusion','participant_count','status']
-    )
-    chart_exclusion.encoding.x.title = 'Exclusion Criteria'
-    chart_exclusion.encoding.y.title = 'Number of Patients'
+    base_criteria = alt.Chart(df2[df2.phase =='phase 3']).mark_circle().encode(
+        alt.Y("participant_count:Q", title="Number of Patients"),
+        tooltip = ['nct_id','inclusion','exclusion','participant_count','status'],
+        color=alt.condition(
+            brush, 
+            'outcome:N', 
+            alt.ColorValue('gray')
+            )
+        ).add_selection(
+                brush
+        )
+    
+    chart_inclusion = base_criteria.encode(
+        alt.X("inclusion:Q", title='Number of Inclusion Criteria')
+        )
+    
+    chart_exclusion = base_criteria.encode(
+        alt.X("exclusion:Q", title='Number of Exclusion Criteria'))
     
 
         #######
@@ -170,10 +164,7 @@ def app():
     st.altair_chart(chart5, use_container_width=True)
 
     st.write("## Does the number of inclusion / exclusion criteria matter?")
-    st.altair_chart(chart_inclusion, use_container_width=True)
-
-    st.altair_chart(chart_exclusion, use_container_width=True)
-
+    st.altair_chart(chart_inclusion | chart_exclusion, use_container_width=True)
  #######
 
     phase_option = pd.unique(df['phase']).tolist()
@@ -189,9 +180,11 @@ def app():
 
     chart6 = base+ base.transform_regression('probability_success', 'participant_count').mark_line()
 
-
+    '''
+    ### Remove chart 6
     st.write("## Correlation between number of patients and historical success rate")
     st.altair_chart(chart6, use_container_width=True)
+    '''
 
 #########
 
