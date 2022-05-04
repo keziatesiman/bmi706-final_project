@@ -91,28 +91,6 @@ def app():
         color=alt.Color('outcome', legend=None),
         tooltip = ['sum(trials_count)', 'country','outcome']
     )
-
-    
-    
-    ########
-
-    #country_code_df = country_code_df[country_code_df['participant_count'].notna()]
-	
-    #successCount = country_code_df[country_code_df.outcome == 1]
-    #failCount = country_code_df[country_code_df.outcome == 0]
-
-    #chart3 = alt.Chart(country_code_df).mark_bar().encode(
-    #    alt.X("participant_count:Q", bin=True),
-    #    y='count()',
-    #)
-
-    #chart3 = alt.Chart(country_code_df).mark_bar().encode(
-    #x='participant_count:O',
-    #y='sum(yield):Q',
-    #color='outcome:N',
-    #column='outcome:N'
-#)
-
 	
 
     chart4 = alt.Chart(SFbyYear).mark_bar().encode(
@@ -164,6 +142,7 @@ def app():
     st.altair_chart(chart5, use_container_width=True)
 
     st.write("## Does the number of inclusion / exclusion criteria matter?")
+    st.write("Select region in plot to highlight specific trials")
     st.altair_chart(chart_inclusion | chart_exclusion, use_container_width=True)
 
     st.write("## Does trial success depend on the therapeutic area and year?")
@@ -181,28 +160,9 @@ def app():
         size='participant_count:Q'
         ,tooltip=['nct_id','participant_count','status','phase','diseases','drugs','outcome']
     )
-#########
 
 
     st.altair_chart(chart7, use_container_width=True)
-
- #######
-
-
-'''
-    base = alt.Chart(df[df.phase ==phase]).mark_circle(color="red").encode(
-        alt.X("probability_success"), alt.Y("participant_count"),tooltip=['probability_success','participant_count']
-    )
-    base.encoding.x.title = 'Historical Success Rate'
-    base.encoding.y.title = 'Number of Patients'
-
-    chart6 = base+ base.transform_regression('probability_success', 'participant_count').mark_line()
-
-
-    ### Remove chart 6
-    st.write("## Correlation between number of patients and historical success rate")
-    st.altair_chart(chart6, use_container_width=True)
-'''
 
 #########
     

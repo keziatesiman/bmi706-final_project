@@ -66,7 +66,7 @@ def app():
 
     ## Select a disease class ###
     diseases = ['Neoplasms']
-    disease_class = st.multiselect("Disease class: ", pd.unique(df_world_map["block_desc"]), diseases)
+    disease_class = st.multiselect("Select a disease class: ", pd.unique(df_world_map["block_desc"]), diseases)
     df_world_map = df_world_map[df_world_map["block_desc"].isin(disease_class)]
 
     # Background
@@ -110,11 +110,12 @@ def app():
 
     filtered_df = df[(df['year'] == year) & (df['block_desc'].isin(disease_class))][['nct_id','study_date','country','drugs','description','icdcodes_first','block_desc','status','phase','participant_count','outcome']]
     filtered_df = filtered_df.rename(columns = {'description': 'disease', 'icdcodes_first' : 'icd', 'block_desc': 'disease_class', 'outcome':'trial_outcome'})
-
+    
+    st.write("## Preview of Source Data")
     st.dataframe(filtered_df)
 
     csv = convert_df(filtered_df)
-
+    st.write("### Export Data")
     st.download_button(
         "Press to Download",
         csv,
