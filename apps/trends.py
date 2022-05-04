@@ -108,7 +108,7 @@ def app():
     def convert_df(df):
         return df.to_csv().encode('utf-8')
 
-    filtered_df = df[(df['year'] == year) & (df['block_desc'].isin(diseases))][['nct_id','study_date','country','drugs','description','icdcodes_first','block_desc','status','phase','participant_count','outcome']]
+    filtered_df = df[(df['year'] == year) & (df['block_desc'].isin(disease_class))][['nct_id','study_date','country','drugs','description','icdcodes_first','block_desc','status','phase','participant_count','outcome']]
     filtered_df = filtered_df.rename(columns = {'description': 'disease', 'icdcodes_first' : 'icd', 'block_desc': 'disease_class', 'outcome':'trial_outcome'})
 
     st.dataframe(filtered_df)
