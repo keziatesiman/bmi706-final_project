@@ -9,51 +9,56 @@ from vega_datasets import data
 @st.cache
 def load_data():
 
+    # Open compressed country data
     with zipfile.ZipFile("df_country.zip") as myzip:    
         country_df = myzip.open("df_country.csv") # Dataset containing country data (each row is a trial-country pair)
         
-    # Read the data
+    # Read country data
     df = pd.read_csv(eval('country_df'))
-
-    df_merged_grouped = df.groupby(['phase','status']).agg(trials_count=('nct_id', np.size)).reset_index()
-
-    df_merged_grouped3 = df.groupby(['outcome','phase']).agg(trials_count=('nct_id', np.size)).reset_index()
     
-    # Loading country code data
+    # Loading country code data, to be used for mapping to world map
     country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'country-code': str})
     country_df = country_df[['Country', 'country-code']]
     country_df = country_df.replace('United States of America', 'United States')
 
-    country_code_df = pd.merge(df, country_df,  how='left', left_on='country', right_on='Country')
-    country_code_df["year"] = pd.DatetimeIndex(country_code_df["study_date"]).year.astype("float")
-    df = country_code_df
+    # Merge country code to main df
+    df = pd.merge(df, country_df,  how='left', left_on='country', right_on='Country')
     
-    # Country dataframe 
-    df_country_new = country_code_df.groupby(['country','country-code']).agg(trials_count=('nct_id', np.size)).reset_index()
+    # Store year data in datetime
+    df["year"] = pd.DatetimeIndex(df["study_date"]).year.astype("float")
 
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new
+    return df
 
 
 def app():
 
-    df, df_merged_grouped, df_merged_grouped3 , df_country_new = load_data()
+    df = load_data()
 
+    # Page header
     st.write("# Visualizing Trends in Clinical Trials")
-    st.write("A data visualization project by Kezia Irene, Manqing Liang, Nate Greenbaum, and Nina Xiong.")
-    st.write("Sources: [ClinicalTrials.gov](https://clinicaltrials.gov/) via [AACT](https://aact.ctti-clinicaltrials.org/) and [Trials Outcome Prediction](https://github.com/futianfan/clinical-trial-outcome-prediction)")
+    st.write("A data visualization project by Kezia Irene, Manqing Liang, Nate Greenbaum and Nina Xiong.")
+    st.write("Sources: [ClinicalTrials.gov](https://clinicaltrials.gov/) via [AACT](https://aact.ctti-clinicaltrials.org/pipe_files) and [Trials Outcome Prediction](https://github.com/futianfan/clinical-trial-outcome-prediction)")
+    
     st.write("## Global Trends")
 
-    ### select year ###
+    ### Select year ###
+    year = st.slider("Year", 1999, 2020, 2012) # Range: 1999, 2012. Default: 2012
+    # Subsetting df by year
+    df = df[df["year"] <= year]
 
-    subset = df[df['year'].notna()]
-    year = st.slider("Year", 1999, 2020, 2012)
-    subset = subset[subset["year"] <= year]
+    ### Select information type: Radio button ###
+    participant_or_trial = st.radio(
+        "Display total: ",
+        ('Trials', 'Participants')
+    )
 
-    # subset of df_country_new
-    df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
+    # Trial count per country
+    df_country_new = df.groupby(['country','country-code', 'year']).agg(trials_count=('nct_id', np.size)).reset_index()
 
-    ### map ###
+    # Participant count per country
+    df_country_participant= df.groupby(['country','country-code', 'year']).agg(participants_counts=('participant_count', np.sum)).reset_index()
 
+    ### Global Trends Map ###
     source = alt.topo_feature(data.world_110m.url, 'countries')
 
     width = 800
@@ -69,25 +74,59 @@ def app():
         height=height,
     ).project(project)
 
-    base = alt.Chart(source
+    timeline = alt.Chart(df_country_new).mark_line().encode(
+        x=alt.X("year:O"),
+        y=alt.Y("trials_count"),
+        color="country"
+    )
+
+    st.altair_chart(timeline, use_container_width=True)
+
+    # Display trial count data
+    if participant_or_trial == 'Trials':
+        base = alt.Chart(source
         ).properties( 
             width=width,
             height=height
         ).project(project
         ).transform_lookup(
             lookup="id",
-            from_=alt.LookupData(df2, "country-code", fields =['trials_count', 'country']),
+            from_=alt.LookupData(df_country_new, "country-code", fields =['trials_count', 'country']),
         )
 
-    rate_scale = alt.Scale(domain=[df2['trials_count'].min(), df2['trials_count'].max()])
-    rate_color = alt.Color(field="trials_count", type="quantitative", scale=rate_scale)
-    chart_rate = base.mark_geoshape().encode(
-        color='trials_count:Q',
-        tooltip=['trials_count:Q', 'country:N']
+        rate_scale = alt.Scale(domain=[df_country_new['trials_count'].min(), df_country_new['trials_count'].max()])
+        rate_color = alt.Color(field="trials_count", type="quantitative", scale=rate_scale)
+        chart_rate = base.mark_geoshape().encode(
+            color='trials_count:Q',
+            tooltip=['trials_count:Q', 'country:N']
+            )
+
+    # Display participant data
+    if participant_or_trial == 'Participants': 
+        base = alt.Chart(source
+        ).properties( 
+            width=width,
+            height=height
+        ).project(project
+        ).transform_lookup(
+            lookup="id",
+            from_=alt.LookupData(df_country_participant, "country-code", fields =['participants_counts', 'country']),
         )
+
+        rate_scale = alt.Scale(domain=[df_country_participant['participants_counts'].min(), df_country_participant['participants_counts'].max()])
+        rate_color = alt.Color(field="participants_counts", type="quantitative", scale=rate_scale)
+        chart_rate = base.mark_geoshape().encode(
+            color='participants_counts:Q',
+            tooltip=['participants_counts:Q', 'country:N']
+            )        
+
 
     st.altair_chart(background + chart_rate, use_container_width=True)
     
+
+
+
+    '''
     ### select country ###
 
     st.write("## Trends Per Country")
@@ -166,3 +205,4 @@ def app():
 
     st.write("### Success Rate Per Phase")
     st.altair_chart(chart5)
+'''
