@@ -43,6 +43,9 @@ def load_data():
     ###
 	
     SFbyYear = country_code_df.groupby(['year','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
+
+    SFbyPhase = country_code_df.groupby(['phase','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
+
         
     #return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, success_count, fail_count
 
@@ -61,13 +64,13 @@ def load_data():
     participant_countGroupDF = df.groupby(['participant_countGroup','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 	
    
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase
 
 
 def app():
 
     #country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, success_count, fail_count = load_data()
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF = load_data()
+    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase = load_data()
    
 
 
@@ -80,6 +83,11 @@ def app():
         color='status'
     )
     
+    chart1B = alt.Chart(SFbyPhase).mark_bar().encode(
+        x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
+        y='phase',
+        color='outcome'
+    )
     
     ########
 
@@ -127,6 +135,7 @@ def app():
     
     #######
     st.altair_chart(chart1, use_container_width=True)
+    st.altair_chart(chart1B, use_container_width=True)
     st.write("## Where do trials fail?")
     st.altair_chart(chart2, use_container_width=True)
     st.write("## Trends Over Time")

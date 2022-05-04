@@ -1,4 +1,4 @@
-# Clinical Trials VIsualization
+# Clinical Trials Visualization
 
 ## BMI 706
 
