@@ -80,13 +80,15 @@ def app():
     chart1 = alt.Chart(df_merged_grouped).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='phase',
-        color='status'
+        color='status',
+        tooltip = ['sum(trials_count)', 'phase','status']
     )
     
     chart1B = alt.Chart(SFbyPhase).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='percentage')),
         y='phase',
-        color='outcome'
+        color='outcome',
+        tooltip = ['sum(trials_count)', 'phase','outcome']
     )
     
     ########
@@ -128,7 +130,7 @@ def app():
  #######
 	
     chart5 = alt.Chart(participant_countGroupDF).mark_bar().encode(
-        x=alt.X('participant_countGroup', axis=alt.Axis(title='Number of Subjects')),
+        x=alt.X('participant_countGroup', axis=alt.Axis(title='Number of Patients')),
         y=alt.X('trials_count:Q',stack="normalize", axis=alt.Axis(format='%', title='Success/Failure %')),
         color=alt.Color('outcome', legend=None)
     )
@@ -140,7 +142,6 @@ def app():
     base.encoding.y.title = 'Number of Patients'
 
     chart6 = base+ base.transform_regression('probability_success', 'participant_count').mark_line()
-
 
     #######
     st.altair_chart(chart1, use_container_width=True)
@@ -154,3 +155,22 @@ def app():
 
     st.write("## Correlation between number of patients and historical success rate")
     st.altair_chart(chart6, use_container_width=True)
+
+#########
+    phase_option = pd.unique(df['phase']).tolist()
+    phase = st.selectbox(
+        'Phase',
+        phase_option)
+
+    chart7 = alt.Chart(df[df.phase ==phase]).mark_circle().encode(
+        alt.X('year(study_date):T', scale=alt.Scale(zero=False)),
+        alt.Y('block_desc:N', scale=alt.Scale(zero=False, padding=1)),
+        color='outcome:N',
+        size='participant_count:Q'
+        ,tooltip=['nct_id','status','phase','diseases','drugs','outcome']
+    )
+#########
+
+    st.write("## Bubble Plot")
+    
+    st.altair_chart(chart7, use_container_width=True)
