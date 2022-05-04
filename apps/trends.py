@@ -15,7 +15,7 @@ def load_data():
         country_df = myzip.open("df_country.csv") # Dataset containing country data (each row is a trial-country pair)
         
     # Read country data
-    df = pd.read_csv(eval('country_df'))
+    df = pd.read_csv(eval('country_df'), index_col=0)
     
     # Loading country code data, to be used for mapping to world map
     country_df = pd.read_csv('https://raw.githubusercontent.com/hms-dbmi/bmi706-2022/main/cancer_data/country_codes.csv', dtype = {'country-code': str})
@@ -43,7 +43,7 @@ def app():
     st.write("## Clinical Trials thoughout the Years")
 
     ### Generating aggregated tables
-    df_trial_count_year_country = df.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index() # Trial count per year per country
+    df_trial_count_year_country = df.groupby(['country','country-code','year','block_desc']).agg(trials_count=('nct_id', np.size)).reset_index() # Trial count per year per country
 
     ### 1. Timeline
 
@@ -62,9 +62,14 @@ def app():
 
     ## Select year ###
     year = st.slider("Select a year", 1999, 2020, 2012) # Range: 1999, 2012. Default: 2012
-    
+
     # Subsetting df by year
     df_world_map = df_trial_count_year_country[df_trial_count_year_country["year"] == year]
+
+    ## Select a disease class ###
+    diseases = pd.unique(df_world_map["block_desc"])
+    disease_class = st.multiselect("Disease class: ", pd.unique(df_world_map["block_desc"]), diseases)
+    df_world_map = df_world_map[df_world_map["block_desc"].isin(diseases)]
 
     # Background
     source = alt.topo_feature(data.world_110m.url, 'countries')
@@ -100,3 +105,21 @@ def app():
         )
     
     st.altair_chart(background + chart_rate, use_container_width=True)   
+
+    def convert_df(df):
+        return df.to_csv().encode('utf-8')
+
+    filtered_df = df[(df['year'] == year) & (df['block_desc'].isin(diseases))][['nct_id','study_date','country','drugs','description','icdcodes_first','block_desc','status','phase','participant_count','outcome']]
+    filtered_df = filtered_df.rename(columns = {'description': 'disease', 'icdcodes_first' : 'icd', 'block_desc': 'disease_class', 'outcome':'trial_outcome'})
+
+    st.dataframe(filtered_df)
+
+    csv = convert_df(filtered_df)
+
+    st.download_button(
+        "Press to Download",
+        csv,
+        "file.csv",
+        "text/csv",
+        key='download-csv'
+    )
