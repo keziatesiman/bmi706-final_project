@@ -62,7 +62,7 @@ def app():
 
     ## Select year ###
     year = st.slider("Select a year", 1999, 2020, 2012) # Range: 1999, 2020. Default: 2012
-    df_world_map = df_trial_count_year_country[df_trial_count_year_country["year"] <= year]
+    df_world_map = df_trial_count_year_country[df_trial_count_year_country["year"] == year]
 
     ## Select a disease class ###
     diseases = ['Neoplasms']
@@ -96,10 +96,10 @@ def app():
 
     # Map values
     rate_scale = alt.Scale(domain=[df_world_map['trials_count'].min(), df_world_map['trials_count'].max()])
-    rate_color = alt.Color(field='sum(trials_count)', type="quantitative", scale=rate_scale)
+    rate_color = alt.Color(field='trials_count', type="quantitative", scale=rate_scale)
     chart_rate = base.mark_geoshape().encode(
-        color='sum(trials_count):Q',
-        tooltip=['sum(trials_count):Q', 'country:N']
+        color='trials_count:Q',
+        tooltip=['trials_count:Q', 'country:N']
         )
     
     st.altair_chart(background + chart_rate, use_container_width=True)   
