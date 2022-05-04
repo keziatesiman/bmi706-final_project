@@ -125,11 +125,16 @@ def app():
 
 
     st.write("## Trends Per Country")
+    subset = df_trial_count_year_country[df_trial_count_year_country['year'].notna()]
+    subset = subset[subset["year"] <= year]
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_trial_count_year_country["country"]), countries)
-    subset = df_trial_count_year_country[df_trial_count_year_country["country"].isin(countries)]
-    chart4 = alt.Chart(subset).mark_line().encode(
+    subset = subset[subset["country"].isin(countries)]
+
+    df2 = subset.groupby(['country','country-code','year']).agg(trials_count=('nct_id', np.size)).reset_index()
+    
+    chart4 = alt.Chart(df2).mark_line().encode(
         x=alt.X("year:O"),
         y=alt.Y("trials_count:Q"),
         color="country",
