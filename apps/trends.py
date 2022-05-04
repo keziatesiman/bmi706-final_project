@@ -129,7 +129,6 @@ def app():
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
     countries = st.multiselect("Countries", pd.unique(df_trial_count_year_country["country"]), countries)
     subset = df_trial_count_year_country[df_trial_count_year_country["country"].isin(countries)]
-    subset = subset[subset["year"]<= year]
     chart4 = alt.Chart(subset).mark_line().encode(
         x=alt.X("year:O"),
         y=alt.Y("trials_count:Q"),
