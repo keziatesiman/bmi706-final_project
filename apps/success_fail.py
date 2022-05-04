@@ -12,9 +12,12 @@ def load_data():
 
     with zipfile.ZipFile("df_country.zip") as myzip:    
         no1 = myzip.open("df_country.csv")
+    with zipfile.ZipFile("df_inclusion_exclusion.zip") as myzip:    
+        no2 = myzip.open("df_inclusion_exclusion.csv")
 
     #Now, we can read in the data
     df = pd.read_csv(eval('no1'))
+    df2 = pd.read_csv(eval('no2'))
     
     #####
     ####
@@ -64,13 +67,13 @@ def load_data():
     #t = lambda data: pipe(data, limit_rows(max_rows=12000), to_values)
     #alt.data_transformers.register('custom', t)
     #alt.data_transformers.enable('custom')
-    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase
+    return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase, df2 
 
 
 def app():
 
     #country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, success_count, fail_count = load_data()
-    df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase = load_data()
+    df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase, df2 = load_data()
    
 
 
@@ -96,7 +99,8 @@ def app():
     chart2 = alt.Chart(SFbyCountry).mark_bar().encode(
         x=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='Percentage')),
         y='country',
-        color=alt.Color('outcome', legend=None)
+        color=alt.Color('outcome', legend=None),
+        tooltip = ['sum(trials_count)', 'country','outcome']
     )
 
     
@@ -125,25 +129,37 @@ def app():
     chart4 = alt.Chart(SFbyYear).mark_bar().encode(
         y=alt.X('sum(trials_count)', stack="normalize", axis=alt.Axis(format='%', title='Success/Failure %')),
         x='year',
-        color=alt.Color('outcome', legend=None)
+        color=alt.Color('outcome', legend=None),
+        tooltip = ['sum(trials_count)','year','outcome']
     )
  #######
-	
+    
     chart5 = alt.Chart(participant_countGroupDF).mark_bar().encode(
         x=alt.X('participant_countGroup', axis=alt.Axis(title='Number of Patients')),
         y=alt.X('trials_count:Q',stack="normalize", axis=alt.Axis(format='%', title='Success/Failure %')),
-        color=alt.Color('outcome', legend=None)
+        color=alt.Color('outcome', legend=None),
+        tooltip = ['participant_countGroup','trials_count','outcome']
     )
- #######
-    base = alt.Chart(df[0:5000]).mark_circle(color="red").encode(
-        alt.X("probability_success"), alt.Y("participant_count"),tooltip=['probability_success','participant_count']
+####### 
+    chart_inclusion = alt.Chart(df2[df2.phase =='phase 3']).mark_circle().encode(
+            alt.X("inclusion:Q"), alt.Y("participant_count:Q"),
+        color = 'outcome:N',
+        tooltip = ['inclusion','exclusion','participant_count','status']
     )
-    base.encoding.x.title = 'Historical Success Rate'
-    base.encoding.y.title = 'Number of Patients'
+    chart_inclusion.encoding.x.title = 'Inclusion Criteria'
+    chart_inclusion.encoding.y.title = 'Number of Patients'
+    
 
-    chart6 = base+ base.transform_regression('probability_success', 'participant_count').mark_line()
+    chart_exclusion = alt.Chart(df2[df2.phase =='phase 3']).mark_circle().encode(
+            alt.X("exclusion:Q"), alt.Y("participant_count:Q"),
+        color = 'outcome:N',
+        tooltip = ['inclusion','exclusion','participant_count','status']
+    )
+    chart_exclusion.encoding.x.title = 'Exclusion Criteria'
+    chart_exclusion.encoding.y.title = 'Number of Patients'
+    
 
-    #######
+        #######
     st.altair_chart(chart1, use_container_width=True)
     st.altair_chart(chart1B, use_container_width=True)
     st.write("## Where do trials fail?")
@@ -153,14 +169,31 @@ def app():
     st.write("## Does size Matter?")
     st.altair_chart(chart5, use_container_width=True)
 
-    st.write("## Correlation between number of patients and historical success rate")
-    st.altair_chart(chart6, use_container_width=True)
+    st.write("## Does the number of inclusion / exclusion criteria matter?")
+    st.altair_chart(chart_inclusion, use_container_width=True)
 
-#########
+    st.altair_chart(chart_exclusion, use_container_width=True)
+
+ #######
+
     phase_option = pd.unique(df['phase']).tolist()
     phase = st.selectbox(
         'Phase',
         phase_option)
+	
+    base = alt.Chart(df[df.phase ==phase]).mark_circle(color="red").encode(
+        alt.X("probability_success"), alt.Y("participant_count"),tooltip=['probability_success','participant_count']
+    )
+    base.encoding.x.title = 'Historical Success Rate'
+    base.encoding.y.title = 'Number of Patients'
+
+    chart6 = base+ base.transform_regression('probability_success', 'participant_count').mark_line()
+
+
+    st.write("## Correlation between number of patients and historical success rate")
+    st.altair_chart(chart6, use_container_width=True)
+
+#########
 
     chart7 = alt.Chart(df[df.phase ==phase]).mark_circle().encode(
         alt.X('year(study_date):T', scale=alt.Scale(zero=False)),
