@@ -96,7 +96,7 @@ def app():
 
     # Map values
     rate_scale = alt.Scale(domain=[df_world_map['trials_count'].min(), df_world_map['trials_count'].max()])
-    rate_color = alt.Color(field='sum(trials_count)', type="quantitative", scale=rate_scale)
+    rate_color = alt.Color(field='trials_count', type="quantitative", scale=rate_scale)
     chart_rate = base.mark_geoshape().encode(
         color='trials_count:Q',
         tooltip=['trials_count:Q', 'country:N']
