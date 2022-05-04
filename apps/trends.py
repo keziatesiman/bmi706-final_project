@@ -125,7 +125,7 @@ def app():
 
 
     st.write("## Trends Per Country")
-    subset = df_trial_count_year_country[df_trial_count_year_country['year'].notna()]
+    subset = df[df['year'].notna()]
     subset = subset[subset["year"] <= year]
 
     countries = ["Austria","Germany","Iceland","Spain","Sweden","Thailand","Turkey"]
