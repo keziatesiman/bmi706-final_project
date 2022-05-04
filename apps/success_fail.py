@@ -5,6 +5,7 @@ import numpy as np
 import altair as alt
 import streamlit as st
 from vega_datasets import data
+from altair import pipe, limit_rows, to_values
 
 @st.cache
 def load_data():
@@ -60,14 +61,16 @@ def load_data():
 
     participant_countGroupDF = df.groupby(['participant_countGroup','outcome']).agg(trials_count=('nct_id', np.size)).reset_index()
 	
-   
+    #t = lambda data: pipe(data, limit_rows(max_rows=12000), to_values)
+    #alt.data_transformers.register('custom', t)
+    #alt.data_transformers.enable('custom')
     return df, df_merged_grouped, df_merged_grouped3, df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase
 
 
 def app():
 
     #country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, success_count, fail_count = load_data()
-    country_code_df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase = load_data()
+    df, df_merged_grouped, df_merged_grouped3 , df_country_new, SFbyCountry, SFbyYear, participant_countGroupDF, SFbyPhase = load_data()
    
 
 
@@ -129,7 +132,16 @@ def app():
         y=alt.X('trials_count:Q',stack="normalize", axis=alt.Axis(format='%', title='Success/Failure %')),
         color=alt.Color('outcome', legend=None)
     )
-    
+ #######
+    base = alt.Chart(df[0:5000]).mark_circle(color="red").encode(
+        alt.X("probability_success"), alt.Y("participant_count"),tooltip=['probability_success','participant_count']
+    )
+    base.encoding.x.title = 'Historical Success Rate'
+    base.encoding.y.title = 'Number of Patients'
+
+    chart6 = base+ base.transform_regression('probability_success', 'participant_count').mark_line()
+
+
     #######
     st.altair_chart(chart1, use_container_width=True)
     st.altair_chart(chart1B, use_container_width=True)
@@ -139,3 +151,6 @@ def app():
     st.altair_chart(chart4, use_container_width=True)
     st.write("## Does size Matter?")
     st.altair_chart(chart5, use_container_width=True)
+
+    st.write("## Correlation between number of patients and historical success rate")
+    st.altair_chart(chart6, use_container_width=True)
