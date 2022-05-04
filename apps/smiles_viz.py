@@ -13,6 +13,7 @@ def load_data():
 
     #Now, we can read in the data
     df = pd.read_csv('df_molecule_pca.csv')
+    df = df.rename(columns={'block_desc':'Disease group'})
 
     return df
 
@@ -27,7 +28,7 @@ def app():
     chart1 = alt.Chart(df[0:5000]).mark_point().encode(
            x = 'PCA1',
            y = 'PCA2',
-           color = 'block_desc',
+           color = 'Disease group',
            tooltip = ['nct_id', 'smiless_first']).interactive()
     
     #######
