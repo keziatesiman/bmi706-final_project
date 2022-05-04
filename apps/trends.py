@@ -61,8 +61,8 @@ def app():
     ### 2. Geographical Trends ###
 
     ## Select year ###
-    year = st.slider("Select a year", 1999, 2020, 2012) # Range: 1999, 2012. Default: 2012
-    df_world_map = df_trial_count_year_country[df_trial_count_year_country["year"] == year]
+    year = st.slider("Select a year", 1999, 2020, 2012) # Range: 1999, 2020. Default: 2012
+    df_world_map = df_trial_count_year_country[df_trial_count_year_country["year"] <= year]
 
     ## Select a disease class ###
     diseases = ['Neoplasms']
