@@ -193,10 +193,10 @@ def app():
         alt.Y('block_desc:N', scale=alt.Scale(zero=False, padding=1)),
         color='outcome:N',
         size='participant_count:Q'
-        ,tooltip=['nct_id','status','phase','diseases','drugs','outcome']
+        ,tooltip=['nct_id','participant_count','status','phase','diseases','drugs','outcome']
     )
 #########
 
-    st.write("## Bubble Plot")
+    st.write("## Does trial success depend on the therapeutic area and year?")
     
     st.altair_chart(chart7, use_container_width=True)
